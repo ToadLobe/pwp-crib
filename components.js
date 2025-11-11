@@ -280,6 +280,55 @@ function renderInput(item, state) {
 }
 
 /**
+ * Render drug information for selected medications
+ * @param {Array} selectedMeds - Array of selected medication names
+ * @param {Array} options - Array of medication option objects
+ * @returns {HTMLElement} Drug info container element
+ */
+function renderDrugInfo(selectedMeds, options) {
+    const container = document.createElement('div');
+    container.className = 'drug-info-container';
+
+    selectedMeds.forEach(medName => {
+        // Skip "None" and "Other" - they don't have drug info
+        if (medName === 'None' || medName === 'Other') return;
+
+        // Find the medication object from options
+        const medOption = options.find(opt =>
+            typeof opt === 'object' && opt.name === medName
+        );
+
+        if (medOption && (medOption.role || medOption.dosage)) {
+            const infoBox = document.createElement('div');
+            infoBox.className = 'drug-info-box';
+
+            const medHeader = document.createElement('div');
+            medHeader.className = 'drug-info-header';
+            medHeader.textContent = medName;
+            infoBox.appendChild(medHeader);
+
+            if (medOption.role) {
+                const roleText = document.createElement('div');
+                roleText.className = 'drug-info-text';
+                roleText.textContent = medOption.role;
+                infoBox.appendChild(roleText);
+            }
+
+            if (medOption.dosage) {
+                const dosageText = document.createElement('div');
+                dosageText.className = 'drug-info-text';
+                dosageText.textContent = `Standard dosage: ${medOption.dosage}`;
+                infoBox.appendChild(dosageText);
+            }
+
+            container.appendChild(infoBox);
+        }
+    });
+
+    return container;
+}
+
+/**
  * Render a search item (searchable dropdown with chips)
  * @param {Object} item - The search item
  * @param {Object} state - The current application state
@@ -314,8 +363,18 @@ function renderSearch(item, state) {
     item.options.forEach(option => {
         const optionElement = document.createElement('div');
         optionElement.className = 'search-option';
-        optionElement.textContent = option;
-        optionElement.dataset.value = option;
+
+        // Handle both string and object options
+        if (typeof option === 'object' && option !== null) {
+            optionElement.textContent = option.name;
+            optionElement.dataset.value = option.name;
+            optionElement.dataset.role = option.role || '';
+            optionElement.dataset.dosage = option.dosage || '';
+        } else {
+            optionElement.textContent = option;
+            optionElement.dataset.value = option;
+        }
+
         optionElement.dataset.cardId = item.stateKey;
         dropdown.appendChild(optionElement);
     });
@@ -329,6 +388,12 @@ function renderSearch(item, state) {
     if (values.length > 0) {
         const chipList = renderChips(item.stateKey, values);
         group.appendChild(chipList);
+    }
+
+    // Render drug information if medications are selected
+    if (values.length > 0 && item.stateKey === 'mh-medication') {
+        const drugInfo = renderDrugInfo(values, item.options);
+        group.appendChild(drugInfo);
     }
 
     return group;
