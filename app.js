@@ -61,11 +61,15 @@ function renderSidebar() {
     if (typeof getSections === 'function') {
         const sections = getSections();
 
+        // Create a <ul> for semantic navigation
+        const ul = document.createElement('ul');
+
         sections.forEach(section => {
-            // Render main section
-            const item = document.createElement('div');
-            item.className = 'sidebar-item';
-            item.dataset.sectionId = section.id;
+            // Render main section as <li>
+            const li = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = '#';
+            link.dataset.sectionId = section.id;
 
             // Check if section is completed (from state.js)
             const isCompleted = typeof isSectionComplete === 'function'
@@ -73,20 +77,23 @@ function renderSidebar() {
                 : false;
 
             if (isCompleted) {
-                item.classList.add('completed');
-                item.innerHTML = `<span class="checkmark">✓</span><span>${section.name}</span>`;
+                link.classList.add('completed');
+                link.innerHTML = `<span class="checkmark">✓</span><span>${section.name}</span>`;
             } else {
-                item.textContent = section.name;
+                link.textContent = section.name;
             }
 
-            sidebarNav.appendChild(item);
+            li.appendChild(link);
+            ul.appendChild(li);
 
             // Render subsections if they exist
             if (section.subsections && section.subsections.length > 0) {
                 section.subsections.forEach(subsection => {
-                    const subItem = document.createElement('div');
-                    subItem.className = 'sidebar-item sidebar-subitem';
-                    subItem.dataset.sectionId = subsection.id;
+                    const subLi = document.createElement('li');
+                    const subLink = document.createElement('a');
+                    subLink.href = '#';
+                    subLink.classList.add('sidebar-subitem');
+                    subLink.dataset.sectionId = subsection.id;
 
                     // Check if subsection is completed
                     const subIsCompleted = typeof isSectionComplete === 'function'
@@ -94,19 +101,26 @@ function renderSidebar() {
                         : false;
 
                     if (subIsCompleted) {
-                        subItem.classList.add('completed');
-                        subItem.innerHTML = `<span class="checkmark">✓</span><span>${subsection.name}</span>`;
+                        subLink.classList.add('completed');
+                        subLink.innerHTML = `<span class="checkmark">✓</span><span>${subsection.name}</span>`;
                     } else {
-                        subItem.textContent = subsection.name;
+                        subLink.textContent = subsection.name;
                     }
 
-                    sidebarNav.appendChild(subItem);
+                    subLi.appendChild(subLink);
+                    ul.appendChild(subLi);
                 });
             }
         });
+
+        sidebarNav.appendChild(ul);
     } else {
         // Placeholder when cards.js isn't loaded yet
-        sidebarNav.innerHTML = '<div class="sidebar-item">Loading sections...</div>';
+        const ul = document.createElement('ul');
+        const li = document.createElement('li');
+        li.textContent = 'Loading sections...';
+        ul.appendChild(li);
+        sidebarNav.appendChild(ul);
     }
 }
 
@@ -235,9 +249,10 @@ function handleTimerReset() {
  * Handle sidebar navigation clicks
  */
 function handleSidebarClick(event) {
-    const item = event.target.closest('.sidebar-item');
-    if (item && item.dataset.sectionId) {
-        scrollToSection(item.dataset.sectionId);
+    const link = event.target.closest('a[data-section-id]');
+    if (link) {
+        event.preventDefault();
+        scrollToSection(link.dataset.sectionId);
     }
 }
 
