@@ -38,50 +38,36 @@
     font-size: 1.5rem;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
-    transition: color 0.3s ease;
 }
 
 .stopwatch.overtime {
     color: var(--pico-del-color);
 }
 
-.timer-controls {
-    display: flex;
-    gap: 0.5rem;
+/* Sidebar Navigation - Pico automatically stacks nav items vertically in <aside> */
+#sidebar-nav ul {
+    padding: 0;
+    margin: 0;
 }
 
-#sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.sidebar-item {
-    padding: 0.5rem 0.75rem;
-    cursor: pointer;
-    border-radius: var(--pico-border-radius);
-    color: var(--pico-primary);
-    transition: background-color 0.2s ease;
-    font-size: 0.9rem;
+#sidebar-nav a {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
 }
 
-.sidebar-item:hover {
-    background-color: var(--pico-primary-hover-background);
-}
-
-.sidebar-item.completed {
+#sidebar-nav a.completed {
     color: var(--pico-muted-color);
 }
 
-.sidebar-item .checkmark {
+#sidebar-nav .checkmark {
     font-size: 1rem;
     color: var(--pico-muted-color);
 }
 
-.sidebar-subitem {
+#sidebar-nav a.sidebar-subitem {
     padding-left: 1.5rem;
     font-size: 0.85rem;
 }
@@ -113,10 +99,6 @@
 /* ===========================
    Article (Card) Behavior Styles
    =========================== */
-
-article {
-    transition: border-color 0.2s ease, opacity 0.2s ease;
-}
 
 article.clickable {
     cursor: pointer;
@@ -183,7 +165,6 @@ article.hidden {
 .search-option {
     padding: 0.5rem 0.75rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
 }
 
 .search-option:hover {
@@ -220,7 +201,6 @@ article.hidden {
     border-radius: var(--pico-border-radius);
     padding: 0.4rem 0.75rem;
     font-size: 0.9rem;
-    transition: border-color 0.2s ease;
 }
 
 .chip:hover {
@@ -232,7 +212,6 @@ article.hidden {
     color: var(--pico-muted-color);
     font-size: 1rem;
     line-height: 1;
-    transition: color 0.2s ease, opacity 0.2s ease;
     opacity: 0;
 }
 
@@ -250,11 +229,6 @@ article.hidden {
 
 .btn-icon {
     padding: 0.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
 }
 
 /* ===========================
