@@ -38,7 +38,7 @@ function renderHeader() {
     const patientName = document.getElementById('patient-name');
 
     // Update stopwatch display (will be updated by timer interval)
-    if (typeof state !== 'undefined' && state.timer !== undefined) {
+    if (typeof state !== 'undefined' && state.elapsedTime !== undefined) {
         updateStopwatch();
     }
 
@@ -110,12 +110,12 @@ function renderMainView() {
 function updateStopwatch() {
     const stopwatchDisplay = document.getElementById('stopwatch-display');
 
-    if (typeof state !== 'undefined' && state.timer !== undefined) {
-        const formattedTime = formatTime(state.timer.elapsed);
+    if (typeof state !== 'undefined' && state.elapsedTime !== undefined) {
+        const formattedTime = formatTime(state.elapsedTime);
         stopwatchDisplay.textContent = formattedTime;
 
         // Add overtime class if over 45 minutes
-        if (isOvertime(state.timer.elapsed)) {
+        if (isOvertime(state.elapsedTime)) {
             stopwatchDisplay.classList.add('overtime');
         } else {
             stopwatchDisplay.classList.remove('overtime');
@@ -130,8 +130,8 @@ function updateTimerToggleButton() {
     const timerToggle = document.getElementById('timer-toggle');
     const icon = timerToggle.querySelector('i');
 
-    if (typeof state !== 'undefined' && state.timer) {
-        if (state.timer.running) {
+    if (typeof state !== 'undefined' && state.isRunning !== undefined) {
+        if (state.isRunning) {
             icon.className = 'ti ti-player-pause';
             timerToggle.setAttribute('aria-label', 'Pause timer');
         } else {
