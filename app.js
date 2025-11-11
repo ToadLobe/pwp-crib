@@ -245,13 +245,13 @@ function handleSidebarClick(event) {
 function handleMainViewClick(event) {
     // Handle card completion toggle
     const card = event.target.closest('article.clickable');
-    if (card && !event.target.closest('.btn, .btn-add, .chip-delete, input')) {
+    if (card && !event.target.closest('button, .chip-delete, input')) {
         handleCardClick(card);
         return;
     }
 
     // Handle add button clicks
-    const addButton = event.target.closest('.btn-add');
+    const addButton = event.target.closest('button[data-card-id]');
     if (addButton) {
         handleAddButtonClick(addButton);
         return;
@@ -340,7 +340,7 @@ function handleInputChange(event) {
     }
 
     // Handle search input filtering
-    if (event.target.classList.contains('search-input')) {
+    if (event.target.type === 'search') {
         handleSearchInput(event.target);
     }
 }
@@ -361,8 +361,8 @@ function handleSearchInput(input) {
  * Handle input focus (for search dropdowns)
  */
 function handleInputFocus(event) {
-    if (event.target.classList.contains('search-input')) {
-        const dropdown = event.target.parentElement.querySelector('.search-dropdown');
+    if (event.target.type === 'search') {
+        const dropdown = event.target.closest('.search-container').querySelector('.search-dropdown');
         if (dropdown) {
             dropdown.classList.add('active');
         }
@@ -373,10 +373,10 @@ function handleInputFocus(event) {
  * Handle input blur (for search dropdowns)
  */
 function handleInputBlur(event) {
-    if (event.target.classList.contains('search-input')) {
+    if (event.target.type === 'search') {
         // Delay to allow click events on dropdown to fire first
         setTimeout(() => {
-            const dropdown = event.target.parentElement.querySelector('.search-dropdown');
+            const dropdown = event.target.closest('.search-container').querySelector('.search-dropdown');
             if (dropdown) {
                 dropdown.classList.remove('active');
             }
@@ -391,14 +391,14 @@ function handleInputKeydown(event) {
     // Check if Enter key was pressed
     if (event.key !== 'Enter') return;
 
-    // Handle regular input fields
-    if (event.target.classList.contains('input-field')) {
+    // Handle regular input/textarea fields (not search inputs)
+    if (event.target.type !== 'search' && (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA')) {
         event.preventDefault();
 
         // Find the associated add button
-        const inputRow = event.target.closest('.input-row');
+        const inputRow = event.target.closest('div[role="group"]');
         if (inputRow) {
-            const addButton = inputRow.querySelector('.btn-add');
+            const addButton = inputRow.querySelector('button[data-card-id]');
             if (addButton) {
                 addButton.click();
             }
@@ -406,11 +406,11 @@ function handleInputKeydown(event) {
     }
 
     // Handle search input fields
-    if (event.target.classList.contains('search-input')) {
+    if (event.target.type === 'search') {
         event.preventDefault();
 
         // Find the first visible search option and click it
-        const searchContainer = event.target.parentElement;
+        const searchContainer = event.target.closest('.search-container');
         if (searchContainer) {
             const dropdown = searchContainer.querySelector('.search-dropdown');
             if (dropdown) {

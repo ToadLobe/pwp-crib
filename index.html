@@ -1,46 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="PWP Assessment Tool - Mental Health Assessment Application">
     <title>PWP Assessment Tool</title>
-
     <!-- Pico CSS Framework -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-
     <!-- Tabler Icons CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons-outline.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
     <!-- Application Styles -->
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <!-- Fixed Sidebar -->
     <aside id="app-sidebar">
         <div class="timer-container">
             <div id="stopwatch-display" class="stopwatch">00:00</div>
             <div role="group">
-                <button id="timer-toggle" class="outline btn-icon" aria-label="Start timer">
-                    <i class="ti ti-player-play"></i>
-                </button>
-                <button id="timer-reset" class="outline btn-icon" aria-label="Reset timer">
-                    <i class="ti ti-rotate-clockwise"></i>
-                </button>
+                <button id="timer-toggle" class="outline">
+                    <i class="ti ti-player-play-filled"></i></button>
+                <button id="timer-reset" class="outline">
+                    <i class="ti ti-rotate-clockwise"></i></button>
             </div>
         </div>
         <nav id="sidebar-nav">
             <!-- Section navigation will be dynamically populated -->
         </nav>
     </aside>
-
     <!-- Main Scrollable View -->
     <main id="app-main">
         <div id="cards-container">
             <!-- Assessment cards will be dynamically populated -->
         </div>
     </main>
-
     <!-- Application Scripts (order matters) -->
     <script src="state.js"></script>
     <script src="utils.js"></script>
@@ -49,4 +44,5 @@
     <script src="cards.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>

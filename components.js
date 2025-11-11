@@ -194,12 +194,7 @@ function getItemContent(item, state) {
 function renderDirection(item, state) {
     const div = document.createElement('div');
     div.className = 'direction';
-
-    const content = document.createElement('div');
-    content.className = 'direction-content';
-    content.textContent = getItemContent(item, state);
-    div.appendChild(content);
-
+    div.textContent = getItemContent(item, state);
     return div;
 }
 
@@ -212,14 +207,8 @@ function renderDirection(item, state) {
 function renderVerbatim(item, state) {
     const div = document.createElement('div');
     div.className = 'verbatim';
-
-    const content = document.createElement('div');
-    content.className = 'verbatim-content';
-    content.style.whiteSpace = 'pre-line';
-    content.textContent = getItemContent(item, state);
-
-    div.appendChild(content);
-
+    div.style.whiteSpace = 'pre-line';
+    div.textContent = getItemContent(item, state);
     return div;
 }
 
@@ -230,19 +219,16 @@ function renderVerbatim(item, state) {
  * @returns {HTMLElement} Input group element
  */
 function renderInput(item, state) {
-    const group = document.createElement('div');
-    group.className = 'input-group';
+    const group = document.createElement('fieldset');
 
     // Label
     const label = document.createElement('label');
-    label.className = 'input-label';
     label.textContent = item.label;
     label.htmlFor = `input-${item.stateKey}`;
     group.appendChild(label);
 
     // Input row (input + button) with role="group"
     const inputRow = document.createElement('div');
-    inputRow.className = 'input-row';
     inputRow.setAttribute('role', 'group');
 
     // Input field (or textarea for multiline)
@@ -254,7 +240,6 @@ function renderInput(item, state) {
         input = document.createElement('input');
         input.type = item.inputType || 'text';
     }
-    input.className = 'input-field';
     input.id = `input-${item.stateKey}`;
     input.placeholder = item.inputType === 'number' ? '0' : 'Type here...';
 
@@ -265,12 +250,11 @@ function renderInput(item, state) {
 
     // Add/Save button
     const button = document.createElement('button');
-    button.className = 'btn-add';
     if (item.singleValue) {
-        button.innerHTML = '<i class="ti ti-device-floppy"></i> Save';
+        button.innerHTML = '<i class="ti ti-device-floppy"></i>';
         button.dataset.singleValue = 'true';
     } else {
-        button.innerHTML = '<i class="ti ti-plus"></i> Add';
+        button.innerHTML = '<i class="ti ti-plus"></i>';
     }
     button.dataset.cardId = item.stateKey;
     button.dataset.inputType = item.inputType || 'text';
@@ -279,9 +263,9 @@ function renderInput(item, state) {
     inputRow.appendChild(button);
     group.appendChild(inputRow);
 
-    // Render chips if there are values
+    // Render chips only if NOT a single-value field
     const values = state.inputs[item.stateKey] || [];
-    if (values.length > 0) {
+    if (values.length > 0 && !item.singleValue) {
         const chipList = renderChips(item.stateKey, values);
         group.appendChild(chipList);
     }
@@ -312,21 +296,24 @@ function renderDrugInfo(selectedMeds) {
             const infoBox = document.createElement('div');
             infoBox.className = 'drug-info-box';
 
-            const medHeader = document.createElement('div');
-            medHeader.className = 'drug-info-header';
+            const medHeader = document.createElement('strong');
             medHeader.textContent = medName;
             infoBox.appendChild(medHeader);
 
             if (medOption.role) {
-                const roleText = document.createElement('div');
-                roleText.className = 'drug-info-text';
+                const roleText = document.createElement('p');
+                roleText.style.margin = '0.25rem 0 0 0';
+                roleText.style.fontSize = '0.9rem';
+                roleText.style.color = 'var(--pico-muted-color)';
                 roleText.textContent = medOption.role;
                 infoBox.appendChild(roleText);
             }
 
             if (medOption.dosage) {
-                const dosageText = document.createElement('div');
-                dosageText.className = 'drug-info-text';
+                const dosageText = document.createElement('p');
+                dosageText.style.margin = '0.25rem 0 0 0';
+                dosageText.style.fontSize = '0.9rem';
+                dosageText.style.color = 'var(--pico-muted-color)';
                 dosageText.textContent = `Standard dosage: ${medOption.dosage}`;
                 infoBox.appendChild(dosageText);
             }
@@ -345,12 +332,10 @@ function renderDrugInfo(selectedMeds) {
  * @returns {HTMLElement} Search group element
  */
 function renderSearch(item, state) {
-    const group = document.createElement('div');
-    group.className = 'search-group';
+    const group = document.createElement('fieldset');
 
     // Label
     const label = document.createElement('label');
-    label.className = 'search-label';
     label.textContent = item.label;
     group.appendChild(label);
 
@@ -361,7 +346,6 @@ function renderSearch(item, state) {
     // Search input
     const input = document.createElement('input');
     input.type = 'search';
-    input.className = 'search-input';
     input.placeholder = 'Type to search...';
     input.autocomplete = 'off';
 
@@ -396,9 +380,9 @@ function renderSearch(item, state) {
     searchContainer.appendChild(dropdown);
     group.appendChild(searchContainer);
 
-    // Render chips if there are values
+    // Render chips only if NOT a single-value field
     const values = state.inputs[item.stateKey] || [];
-    if (values.length > 0) {
+    if (values.length > 0 && !item.singleValue) {
         const chipList = renderChips(item.stateKey, values);
         group.appendChild(chipList);
     }
@@ -426,9 +410,8 @@ function renderChips(stateKey, values) {
         const chip = document.createElement('div');
         chip.className = 'chip';
 
-        const chipText = document.createElement('span');
-        chipText.className = 'chip-text';
-        chipText.textContent = value;
+        const chipText = document.createTextNode(value);
+        chip.appendChild(chipText);
 
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'chip-delete';
@@ -437,7 +420,6 @@ function renderChips(stateKey, values) {
         deleteBtn.dataset.index = index;
         deleteBtn.setAttribute('aria-label', 'Remove');
 
-        chip.appendChild(chipText);
         chip.appendChild(deleteBtn);
         chipList.appendChild(chip);
     });
