@@ -298,24 +298,7 @@ const cards = [
         section: "information-gathering",
         subsection: "context",
         items: [
-            { type: "search", label: "Medication for mental health", stateKey: "mh-medication", options: [
-                { name: "None", role: "", dosage: "" },
-                { name: "Sertraline", role: "SSRI antidepressant", dosage: "50-200mg daily" },
-                { name: "Citalopram", role: "SSRI antidepressant", dosage: "20-40mg daily" },
-                { name: "Fluoxetine", role: "SSRI antidepressant", dosage: "20-80mg daily" },
-                { name: "Escitalopram", role: "SSRI antidepressant", dosage: "10-20mg daily" },
-                { name: "Paroxetine", role: "SSRI antidepressant", dosage: "20-50mg daily" },
-                { name: "Venlafaxine", role: "SNRI antidepressant", dosage: "75-225mg daily" },
-                { name: "Duloxetine", role: "SNRI antidepressant", dosage: "60-120mg daily" },
-                { name: "Mirtazapine", role: "Atypical antidepressant", dosage: "15-45mg nightly" },
-                { name: "Amitriptyline", role: "Tricyclic antidepressant", dosage: "50-200mg daily" },
-                { name: "Propranolol", role: "Beta-blocker for anxiety", dosage: "40-160mg daily" },
-                { name: "Diazepam", role: "Benzodiazepine for anxiety", dosage: "2-10mg as needed" },
-                { name: "Lorazepam", role: "Benzodiazepine for anxiety", dosage: "0.5-2mg as needed" },
-                { name: "Quetiapine", role: "Atypical antipsychotic", dosage: "25-300mg daily" },
-                { name: "Olanzapine", role: "Atypical antipsychotic", dosage: "5-20mg daily" },
-                { name: "Other", role: "", dosage: "" }
-            ] },
+            { type: "search", label: "Medication for mental health", stateKey: "mh-medication", options: medications },
             { type: "input", inputType: "text", label: "Attitude towards medication", stateKey: "medication-attitude" }
         ]
     },
@@ -592,61 +575,61 @@ function getCards() {
 }
 
 /**
- * Update section completion status based on card completion
- * This is called from state.js when needed
+ * Check if a card is visible (passes showIf condition if present)
+ * @param {Object} card - The card definition
+ * @returns {boolean} True if card should be counted
+ */
+function isCardVisible(card) {
+    if (card.showIf && typeof card.showIf === 'function') {
+        return card.showIf(state);
+    }
+    return true;
+}
+
+/**
+ * Get all visible cards matching section and subsection
+ * @param {string} sectionId - The section ID
+ * @param {string} subsectionId - Optional subsection ID
+ * @returns {Array} Array of matching visible cards
+ */
+function getVisibleCards(sectionId, subsectionId) {
+    return cards.filter(card => {
+        if (card.section !== sectionId) return false;
+        if (subsectionId && card.subsection !== subsectionId) return false;
+        return isCardVisible(card);
+    });
+}
+
+/**
+ * Check if all cards in a group are completed
+ * @param {Array} cardGroup - Array of cards to check
+ * @returns {boolean} True if all cards are completed
+ */
+function areAllCardsComplete(cardGroup) {
+    return cardGroup.length > 0 && cardGroup.every(card => state.completed[card.id] === true);
+}
+
+/**
+ * Update completion status for all sections and subsections
  */
 function updateSectionCompletion() {
     if (!state) return;
 
     sections.forEach(section => {
-        // If section has subsections, check each subsection
         if (section.subsections && section.subsections.length > 0) {
+            // Update completion for each subsection
             section.subsections.forEach(subsection => {
-                // Get all cards in this subsection
-                const subsectionCards = cards.filter(card => {
-                    if (card.section !== section.id || card.subsection !== subsection.id) return false;
-
-                    // Don't count cards that are conditionally hidden
-                    if (card.showIf && typeof card.showIf === 'function') {
-                        if (!card.showIf(state)) return false;
-                    }
-
-                    return true;
-                });
-
-                // Check if all cards in subsection are completed
-                const allCompleted = subsectionCards.length > 0 && subsectionCards.every(card => {
-                    return state.completed[card.id] === true;
-                });
-
-                state.sections[subsection.id] = allCompleted;
+                const visibleCards = getVisibleCards(section.id, subsection.id);
+                state.sections[subsection.id] = areAllCardsComplete(visibleCards);
             });
 
             // Section is complete if all subsections are complete
-            const allSubsectionsComplete = section.subsections.every(subsection => {
-                return state.sections[subsection.id] === true;
-            });
-
-            state.sections[section.id] = allSubsectionsComplete;
+            const allComplete = section.subsections.every(sub => state.sections[sub.id] === true);
+            state.sections[section.id] = allComplete;
         } else {
-            // Get all cards in this section (no subsections)
-            const sectionCards = cards.filter(card => {
-                if (card.section !== section.id) return false;
-
-                // Don't count cards that are conditionally hidden
-                if (card.showIf && typeof card.showIf === 'function') {
-                    if (!card.showIf(state)) return false;
-                }
-
-                return true;
-            });
-
-            // Check if all cards in section are completed
-            const allCompleted = sectionCards.length > 0 && sectionCards.every(card => {
-                return state.completed[card.id] === true;
-            });
-
-            state.sections[section.id] = allCompleted;
+            // No subsections: check section directly
+            const visibleCards = getVisibleCards(section.id);
+            state.sections[section.id] = areAllCardsComplete(visibleCards);
         }
     });
 }

@@ -235,25 +235,6 @@ function addEntry(cardId, value, singleValue = false) {
 }
 
 /**
- * Add a search entry (alias for addEntry for clarity)
- * @param {string} cardId - The card ID (stateKey)
- * @param {*} value - The value to add
- * @param {boolean} singleValue - If true, replaces existing value instead of adding
- */
-function addSearchEntry(cardId, value, singleValue = false) {
-    addEntry(cardId, value, singleValue);
-}
-
-/**
- * Update input (alias for addEntry, following spec)
- * @param {string} cardId - The card ID (stateKey)
- * @param {*} value - The value to add
- */
-function updateInput(cardId, value) {
-    addEntry(cardId, value);
-}
-
-/**
  * Remove an entry from a card's inputs
  * @param {string} cardId - The card ID (stateKey)
  * @param {number} index - The index of the entry to remove
@@ -274,23 +255,6 @@ function removeEntry(cardId, index) {
         saveState();
         console.log(`Removed entry at index ${index} from ${cardId}`);
     }
-}
-
-/**
- * Remove input (alias for removeEntry, following spec)
- * @param {string} cardId - The card ID (stateKey)
- * @param {number} index - The index of the entry to remove
- */
-function removeInput(cardId, index) {
-    removeEntry(cardId, index);
-}
-
-/**
- * Toggle completion status (alias for toggleCardComplete, following spec)
- * @param {string} cardId - The card ID to toggle
- */
-function toggleComplete(cardId) {
-    toggleCardComplete(cardId);
 }
 
 /**

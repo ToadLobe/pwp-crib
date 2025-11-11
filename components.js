@@ -143,27 +143,46 @@ function renderCard(cardDef, state) {
 }
 
 /**
+ * Registry of item type renderers
+ * Maps item type to its rendering function
+ */
+const itemRenderers = {
+    direction: renderDirection,
+    verbatim: renderVerbatim,
+    input: renderInput,
+    search: renderSearch,
+    'diagram-link': renderDiagramLink
+};
+
+/**
  * Render a card item based on its type
  * @param {Object} item - The item definition
  * @param {Object} state - The current application state
  * @returns {HTMLElement} Item element
  */
 function renderCardItem(item, state) {
-    switch (item.type) {
-        case 'direction':
-            return renderDirection(item, state);
-        case 'verbatim':
-            return renderVerbatim(item, state);
-        case 'input':
-            return renderInput(item, state);
-        case 'search':
-            return renderSearch(item, state);
-        case 'diagram-link':
-            return renderDiagramLink(item, state);
-        default:
-            console.warn('Unknown item type:', item.type);
-            return null;
+    const renderer = itemRenderers[item.type];
+    if (!renderer) {
+        console.warn('Unknown item type:', item.type);
+        return null;
     }
+    return renderer(item, state);
+}
+
+/**
+ * Get and process item content with interpolation
+ * @param {Object} item - The item definition
+ * @param {Object} state - The current application state
+ * @returns {string} Processed content with variables interpolated
+ */
+function getItemContent(item, state) {
+    // Get the text content (may be a function)
+    let text = typeof item.content === 'function'
+        ? item.content(state)
+        : item.content;
+
+    // Interpolate variables
+    return interpolateContent(text, state);
 }
 
 /**
@@ -178,16 +197,7 @@ function renderDirection(item, state) {
 
     const content = document.createElement('div');
     content.className = 'direction-content';
-
-    // Get the text content (may be a function)
-    let text = typeof item.content === 'function'
-        ? item.content(state)
-        : item.content;
-
-    // Interpolate variables
-    text = interpolateContent(text, state);
-
-    content.textContent = text;
+    content.textContent = getItemContent(item, state);
     div.appendChild(content);
 
     return div;
@@ -205,18 +215,8 @@ function renderVerbatim(item, state) {
 
     const content = document.createElement('div');
     content.className = 'verbatim-content';
-
-    // Get the text content (may be a function)
-    let text = typeof item.content === 'function'
-        ? item.content(state)
-        : item.content;
-
-    // Interpolate variables
-    text = interpolateContent(text, state);
-
-    // Preserve line breaks for feedback text
     content.style.whiteSpace = 'pre-line';
-    content.textContent = text;
+    content.textContent = getItemContent(item, state);
 
     div.appendChild(content);
 
@@ -292,23 +292,23 @@ function renderInput(item, state) {
 /**
  * Render drug information for selected medications
  * @param {Array} selectedMeds - Array of selected medication names
- * @param {Array} options - Array of medication option objects
  * @returns {HTMLElement} Drug info container element
  */
-function renderDrugInfo(selectedMeds, options) {
+function renderDrugInfo(selectedMeds) {
     const container = document.createElement('div');
     container.className = 'drug-info-container';
 
     selectedMeds.forEach(medName => {
-        // Skip "None" and "Other" - they don't have drug info
-        if (medName === 'None' || medName === 'Other') return;
+        // Skip if medication has no info to display
+        if (typeof hasMedicationInfo !== 'function' || !hasMedicationInfo(medName)) {
+            return;
+        }
 
-        // Find the medication object from options
-        const medOption = options.find(opt =>
-            typeof opt === 'object' && opt.name === medName
-        );
+        const medOption = typeof getMedicationByName === 'function'
+            ? getMedicationByName(medName)
+            : null;
 
-        if (medOption && (medOption.role || medOption.dosage)) {
+        if (medOption) {
             const infoBox = document.createElement('div');
             infoBox.className = 'drug-info-box';
 
@@ -405,7 +405,7 @@ function renderSearch(item, state) {
 
     // Render drug information if medications are selected
     if (values.length > 0 && item.stateKey === 'mh-medication') {
-        const drugInfo = renderDrugInfo(values, item.options);
+        const drugInfo = renderDrugInfo(values);
         group.appendChild(drugInfo);
     }
 
@@ -632,6 +632,15 @@ function handleAddEntry(cardId, inputType, singleValue = false) {
     if (inputType === 'number') {
         value = parseFloat(value);
         if (isNaN(value)) return;
+    }
+
+    // Validate input if validation rules exist
+    if (typeof validateInput === 'function') {
+        const validation = validateInput(cardId, value);
+        if (!validation.valid) {
+            alert(validation.message);
+            return;
+        }
     }
 
     // Add the entry using state management function

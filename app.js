@@ -16,7 +16,6 @@ function initApp() {
     }
 
     // Render initial UI components
-    renderHeader();
     renderSidebar();
     renderMainView();
 
@@ -27,25 +26,6 @@ function initApp() {
     setupEventListeners();
 
     console.log('PWP Assessment Tool initialized');
-}
-
-/**
- * Render the header component
- */
-function renderHeader() {
-    const stopwatchDisplay = document.getElementById('stopwatch-display');
-    const timerToggle = document.getElementById('timer-toggle');
-    const patientName = document.getElementById('patient-name');
-
-    // Update stopwatch display (will be updated by timer interval)
-    if (typeof state !== 'undefined' && state.elapsedTime !== undefined) {
-        updateStopwatch();
-    }
-
-    // Update patient name
-    if (typeof state !== 'undefined' && state.patientName) {
-        patientName.textContent = state.patientName;
-    }
 }
 
 /**
@@ -341,8 +321,8 @@ function handleSearchOptionClick(option) {
     const value = option.dataset.value;
     const singleValue = option.dataset.singleValue === 'true';
 
-    if (typeof addSearchEntry === 'function') {
-        addSearchEntry(cardId, value, singleValue); // Defined in state.js
+    if (typeof addEntry === 'function') {
+        addEntry(cardId, value, singleValue); // Defined in state.js
         renderMainView();
         renderSidebar();
     }

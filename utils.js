@@ -89,3 +89,39 @@ function interpolate(template, state) {
 function isOvertime(milliseconds) {
     return milliseconds > 2700000;
 }
+
+/**
+ * Input validation schema: defines min/max constraints for specific fields
+ */
+const fieldValidation = {
+    'phq9-score': { min: 0, max: 27, name: 'PHQ-9 score' },
+    'phq9-q9': { min: 0, max: 3, name: 'PHQ-9 Q9' },
+    'gad7-score': { min: 0, max: 21, name: 'GAD-7 score' },
+    'motivation-score': { min: 0, max: 10, name: 'Motivation score' }
+};
+
+/**
+ * Validate input value against schema constraints
+ * @param {string} fieldId - The field identifier
+ * @param {*} value - The value to validate
+ * @returns {Object} { valid: boolean, message: string }
+ */
+function validateInput(fieldId, value) {
+    const schema = fieldValidation[fieldId];
+    if (!schema) return { valid: true }; // No validation for this field
+
+    const num = parseFloat(value);
+    if (isNaN(num)) {
+        return { valid: false, message: `${schema.name} must be a number` };
+    }
+
+    if (num < schema.min) {
+        return { valid: false, message: `${schema.name} must be at least ${schema.min}` };
+    }
+
+    if (num > schema.max) {
+        return { valid: false, message: `${schema.name} must not exceed ${schema.max}` };
+    }
+
+    return { valid: true };
+}

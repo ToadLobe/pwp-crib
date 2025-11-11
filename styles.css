@@ -1,12 +1,4 @@
 /* ===========================
-   Layout Variables
-   =========================== */
-
-:root {
-    --sidebar-width: 240px;
-}
-
-/* ===========================
    Fixed Sidebar Layout
    =========================== */
 
@@ -34,29 +26,10 @@
     border-bottom: 1px solid var(--pico-muted-border-color);
 }
 
-.stopwatch {
-    font-size: 1.5rem;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-}
-
 .stopwatch.overtime {
     color: var(--pico-del-color);
 }
 
-/* Sidebar Navigation - Pico automatically stacks nav items vertically in <aside> */
-#sidebar-nav ul {
-    padding: 0;
-    margin: 0;
-}
-
-#sidebar-nav a {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
-}
 
 #sidebar-nav a.completed {
     color: var(--pico-muted-color);
@@ -181,7 +154,7 @@ article.hidden {
 }
 
 /* ===========================
-   Chips (Tags)
+   Chips
    =========================== */
 
 .chips-container,
@@ -255,14 +228,6 @@ article.hidden {
 
 .drug-info-text:last-child {
     margin-bottom: 0;
-}
-
-/* ===========================
-   Icon Buttons
-   =========================== */
-
-.btn-icon {
-    padding: 0.5rem;
 }
 
 /* ===========================
