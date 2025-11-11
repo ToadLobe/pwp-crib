@@ -76,6 +76,7 @@
         <button onclick="testPauseTimer()">Pause Timer</button>
         <button onclick="testToggleTimer()">Toggle Timer</button>
         <button onclick="testResetTimer()">Reset Timer</button>
+        <button onclick="testResetAll()">Reset All</button>
         <div id="timer-result" class="result"></div>
     </div>
 
@@ -154,6 +155,16 @@
             document.getElementById('timer-result').innerHTML =
                 '<span class="success">✓ Timer reset</span><br>' +
                 'elapsedTime: ' + state.elapsedTime + 'ms';
+        }
+
+        function testResetAll() {
+            resetAll();
+            document.getElementById('timer-result').innerHTML =
+                '<span class="success">✓ All state reset</span><br>' +
+                'elapsedTime: ' + state.elapsedTime + 'ms<br>' +
+                'patientName: "' + state.patientName + '"<br>' +
+                'inputs: ' + JSON.stringify(state.inputs) + '<br>' +
+                'completed: ' + JSON.stringify(state.completed);
         }
 
         function testAddEntry() {

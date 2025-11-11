@@ -170,6 +170,21 @@ function resetTimer() {
 }
 
 /**
+ * Reset all state including timer, inputs, and completion status
+ */
+function resetAll() {
+    if (!state) return;
+
+    // Reset to default state but keep the session ID
+    const sessionId = state.sessionId;
+    state = getDefaultState();
+    state.sessionId = sessionId;
+
+    saveState();
+    console.log('All state reset (timer, inputs, completion)');
+}
+
+/**
  * Toggle card completion status
  * @param {string} cardId - The card ID to toggle
  */
