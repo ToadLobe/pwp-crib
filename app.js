@@ -292,9 +292,10 @@ function handleCardClick(cardElement) {
 function handleAddButtonClick(button) {
     const cardId = button.dataset.cardId;
     const inputType = button.dataset.inputType;
+    const singleValue = button.dataset.singleValue === 'true';
 
     if (typeof handleAddEntry === 'function') {
-        handleAddEntry(cardId, inputType); // Defined in components.js or state.js
+        handleAddEntry(cardId, inputType, singleValue); // Defined in components.js or state.js
         renderMainView();
         renderSidebar();
     }
@@ -320,9 +321,10 @@ function handleChipDelete(deleteButton) {
 function handleSearchOptionClick(option) {
     const cardId = option.dataset.cardId;
     const value = option.dataset.value;
+    const singleValue = option.dataset.singleValue === 'true';
 
     if (typeof addSearchEntry === 'function') {
-        addSearchEntry(cardId, value); // Defined in state.js
+        addSearchEntry(cardId, value, singleValue); // Defined in state.js
         renderMainView();
         renderSidebar();
     }

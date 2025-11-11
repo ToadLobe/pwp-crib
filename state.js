@@ -204,8 +204,9 @@ function toggleCardComplete(cardId) {
  * Add an input entry to a card
  * @param {string} cardId - The card ID (stateKey)
  * @param {*} value - The value to add
+ * @param {boolean} singleValue - If true, replaces existing value instead of adding
  */
-function addEntry(cardId, value) {
+function addEntry(cardId, value, singleValue = false) {
     if (!state || !cardId || value === null || value === undefined || value === '') {
         return;
     }
@@ -215,8 +216,13 @@ function addEntry(cardId, value) {
         state.inputs[cardId] = [];
     }
 
-    // Add the value
-    state.inputs[cardId].push(value);
+    // For single value fields, replace the entire array
+    if (singleValue) {
+        state.inputs[cardId] = [value];
+    } else {
+        // Add the value
+        state.inputs[cardId].push(value);
+    }
 
     // Update patient name if this is the patient-name input
     if (cardId === 'patient-name' && value) {
@@ -224,16 +230,17 @@ function addEntry(cardId, value) {
     }
 
     saveState();
-    console.log(`Added entry to ${cardId}:`, value);
+    console.log(`${singleValue ? 'Set' : 'Added'} entry to ${cardId}:`, value);
 }
 
 /**
  * Add a search entry (alias for addEntry for clarity)
  * @param {string} cardId - The card ID (stateKey)
  * @param {*} value - The value to add
+ * @param {boolean} singleValue - If true, replaces existing value instead of adding
  */
-function addSearchEntry(cardId, value) {
-    addEntry(cardId, value);
+function addSearchEntry(cardId, value, singleValue = false) {
+    addEntry(cardId, value, singleValue);
 }
 
 /**

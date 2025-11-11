@@ -50,7 +50,7 @@ const cards = [
         items: [
             { type: "direction", content: "Give your full name and preferred name." },
             { type: "direction", content: "Ask for the patient's full name and preferred name." },
-            { type: "input", inputType: "text", label: "Patient's preferred name", stateKey: "patient-name" }
+            { type: "input", inputType: "text", label: "Patient's preferred name", stateKey: "patient-name", singleValue: true }
         ]
     },
     {
@@ -74,8 +74,8 @@ const cards = [
         subsection: "problem",
         items: [
             { type: "verbatim", content: "So ${name}, could you tell me a little bit about what's brought you here today?" },
-            { type: "input", inputType: "text", label: "Core problem", stateKey: "core-problem" },
-            { type: "search", label: "Category", stateKey: "category", options: ["Anxiety", "Mood", "Pain", "Panic", "Stress", "Other"] }
+            { type: "input", inputType: "text", label: "Core problem", stateKey: "core-problem", singleValue: true },
+            { type: "search", label: "Category", stateKey: "category", options: ["Anxiety", "Mood", "Pain", "Panic", "Stress", "Other"], singleValue: true }
         ]
     },
     {
@@ -155,9 +155,9 @@ const cards = [
             { type: "verbatim", content: "Now I'd like to ask you to complete a couple of short questionnaires. They're just help us get a snapshot of how you've been feeling over the last two weeks and help us track your progress." },
             { type: "direction", content: "Pass the patient the ROMS." },
             { type: "verbatim", content: "So this is the PHQ-9, which asks you about symptoms of depression and low mood. This one is the GAD-7, which asks about symptoms of anxiety. As you can see, you are asked how often in the last two weeks you have experienced each symptom - either not at all, several days, more than half the days, or nearly every day. We can go through them together, or you can fill them out on your own, whichever you prefer." },
-            { type: "input", inputType: "number", label: "PHQ-9 score", stateKey: "phq9-score" },
-            { type: "input", inputType: "number", label: "PHQ-9 Q9 score", stateKey: "phq9-q9" },
-            { type: "input", inputType: "number", label: "GAD-7 score", stateKey: "gad7-score" }
+            { type: "input", inputType: "number", label: "PHQ-9 score", stateKey: "phq9-score", singleValue: true },
+            { type: "input", inputType: "number", label: "PHQ-9 Q9 score", stateKey: "phq9-q9", singleValue: true },
+            { type: "input", inputType: "number", label: "GAD-7 score", stateKey: "gad7-score", singleValue: true }
         ]
     },
     {
@@ -245,7 +245,7 @@ const cards = [
         subsection: "safety",
         items: [
             { type: "direction", content: "Summarise the patient's answers to the safety assessment." },
-            { type: "search", label: "Safety plan required?", stateKey: "safety-plan-required", options: ["yes", "no"] }
+            { type: "search", label: "Safety plan required?", stateKey: "safety-plan-required", options: ["yes", "no"], singleValue: true }
         ]
     },
     {
@@ -348,7 +348,7 @@ const cards = [
         section: "information-giving",
         subsection: "diagnosis",
         items: [
-            { type: "search", label: "Diagnosis", stateKey: "diagnosis", options: ["Depression", "GAD", "Panic Disorder", "Agoraphobia", "Agoraphobia with Panic Disorder", "Phobia", "OCD", "PTSD", "Social Phobia", "Hypochondriasis", "BDD"] }
+            { type: "search", label: "Diagnosis", stateKey: "diagnosis", options: ["Depression", "GAD", "Panic Disorder", "Agoraphobia", "Agoraphobia with Panic Disorder", "Phobia", "OCD", "PTSD", "Social Phobia", "Hypochondriasis", "BDD"], singleValue: true }
         ]
     },
     {
@@ -459,7 +459,7 @@ const cards = [
                     return `Treatment decision guidance: ${guidance[dx] || "Consider impact severity"}`;
                 }
             },
-            { type: "search", label: "Treatment", stateKey: "treatment", options: ["LiCBT", "HiCBT"] }
+            { type: "search", label: "Treatment", stateKey: "treatment", options: ["LiCBT", "HiCBT"], singleValue: true }
         ]
     },
     {
@@ -494,7 +494,7 @@ const cards = [
             { type: "input", inputType: "text", label: "Capability considerations", stateKey: "capability" },
             { type: "input", inputType: "text", label: "Opportunity considerations", stateKey: "opportunity" },
             { type: "input", inputType: "text", label: "Motivation considerations", stateKey: "motivation-considerations" },
-            { type: "input", inputType: "number", label: "Motivation out of ten", stateKey: "motivation-score" }
+            { type: "input", inputType: "number", label: "Motivation out of ten", stateKey: "motivation-score", singleValue: true }
         ]
     },
     {
@@ -542,7 +542,7 @@ const cards = [
                 type: "direction",
                 content: "Summary for reference - Problem: ${core-problem}, Symptoms: ${sensations}, ${behaviours}, ${thoughts}, Impacts: ${impact-work}, ${impact-home}, Goals: ${goals}"
             },
-            { type: "input", inputType: "text", label: "Problem statement", stateKey: "problem-statement", multiline: true },
+            { type: "input", inputType: "text", label: "Problem statement", stateKey: "problem-statement", multiline: true, singleValue: true },
             { type: "direction", content: "Read it back to the patient and confirm it fits their experience." }
         ]
     },
