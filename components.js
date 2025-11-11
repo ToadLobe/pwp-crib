@@ -258,10 +258,20 @@ function renderInput(item, state) {
     input.id = `input-${item.stateKey}`;
     input.placeholder = item.inputType === 'number' ? '0' : 'Type here...';
 
-    // Add button
+    // For single value fields, populate with existing value
+    if (item.singleValue && state.inputs[item.stateKey] && state.inputs[item.stateKey].length > 0) {
+        input.value = state.inputs[item.stateKey][0];
+    }
+
+    // Add/Save button
     const button = document.createElement('button');
     button.className = 'btn-add';
-    button.innerHTML = '<i class="ti ti-plus"></i> Add';
+    if (item.singleValue) {
+        button.innerHTML = '<i class="ti ti-device-floppy"></i> Save';
+        button.dataset.singleValue = 'true';
+    } else {
+        button.innerHTML = '<i class="ti ti-plus"></i> Add';
+    }
     button.dataset.cardId = item.stateKey;
     button.dataset.inputType = item.inputType || 'text';
 
@@ -376,6 +386,9 @@ function renderSearch(item, state) {
         }
 
         optionElement.dataset.cardId = item.stateKey;
+        if (item.singleValue) {
+            optionElement.dataset.singleValue = 'true';
+        }
         dropdown.appendChild(optionElement);
     });
 
@@ -606,8 +619,9 @@ function filterSearchOptions(dropdown, query) {
  * Handle add entry from input field
  * @param {string} cardId - The card/state key
  * @param {string} inputType - The input type (text or number)
+ * @param {boolean} singleValue - If true, replaces existing value instead of adding
  */
-function handleAddEntry(cardId, inputType) {
+function handleAddEntry(cardId, inputType, singleValue = false) {
     const input = document.getElementById(`input-${cardId}`);
     if (!input) return;
 
@@ -622,7 +636,7 @@ function handleAddEntry(cardId, inputType) {
 
     // Add the entry using state management function
     if (typeof addEntry === 'function') {
-        addEntry(cardId, value);
+        addEntry(cardId, value, singleValue);
     }
 
     // Clear the input
