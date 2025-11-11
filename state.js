@@ -61,7 +61,8 @@ function loadState() {
             state = {
                 ...getDefaultState(),
                 ...parsed,
-                // Always reset running state on load (timer doesn't persist across sessions)
+                // Preserve elapsed time, but reset running state
+                // (timer pauses on reload, but elapsed time persists)
                 isRunning: false,
                 startTime: null
             };

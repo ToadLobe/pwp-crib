@@ -12,11 +12,27 @@ This sidebar contains a stopwatch at the top with start/pause and reset controls
 
 ## Main View
 
-This is where the entire assessment process is detailed. Content is separated into 'cards'. Cards contain four categories of content: 'Direction', which are short written instructions. 'Verbatim', which is a block of text to read out word for word. 'Input' which is a text box or number input field. 'Search' which is a list of predefined values that can be filtered and selected from which will funnel later content.
+This is where the entire assessment process is detailed. Content is separated into 'cards'. Cards contain five categories of content:
 
-Note that input fields and search lists allow for multiple discrete inputs via an 'add' button which are collated in a list of chips below the input. Items from this list can be deleted using a bin icon which appears when a chip is hovered over.
+- **Direction**: Short written instructions (grey, italic text)
+- **Verbatim**: A block of text to read out word for word (preserves line breaks for readability)
+- **Input**: A text box or number input field with either a 'Save' button (single-value) or 'Add' button (multi-value)
+- **Search**: A searchable dropdown list of predefined values that can be filtered and selected from, which will funnel later content
+- **Diagram Link**: A button that opens an interactive diagram in a new browser tab (currently used for the CBT cycle visualization)
 
-Cards with only instructions and verbatim can be completed by simply clicking on them (they can be clicked again to uncomplete, like a checklist). Cards which contain an input or search selection will complete when their input list has at least one entry.
+### Input Field Behavior
+
+**Single-value input fields** (e.g., patient's preferred name, core problem) have a 'Save' button that replaces the previous value when clicked.
+
+**Multi-value input fields** (e.g., triggers, symptoms) have an 'Add' button that appends entries to a list of chips displayed below the input. Pressing Enter also submits the input. Items from the chip list can be deleted using a bin icon that appears when a chip is hovered over. These fields complete when they contain at least one entry.
+
+**Search fields** display a filterable dropdown that appears when the input is focused. The dropdown filters in real-time as the user types (case-insensitive substring matching). When a user selects an option or the input loses focus, the dropdown closes. For medication searches, drug information boxes are displayed below the search showing the medication's role and standard dosage (excluding 'None' and 'Other' options which are always available but don't display info).
+
+### Card Completion
+
+**Cards with only directions and verbatim** can be completed by clicking on them (they can be clicked again to uncomplete, like a checklist).
+
+**Cards with input or search fields** complete automatically when they contain at least one entry. For single-value fields, the entry must be saved with the Save button.
 
 # Structure
 
@@ -40,7 +56,7 @@ There are five core stages in a PWP assessment, each with subsections. The struc
     * Problem Statement
     * Next Steps
 
-I will separate each card with --- and code Direction, Verbatim, Input, and Search as D, V, I, and S respectively. I have used ${} syntax where a tracked variable should be included in the text, and have included notes on branching content within {}.
+I will separate each card with --- and code Direction, Verbatim, Input, Search, and Diagram Link as D, V, I, S, and L respectively. I have used ${} syntax where a tracked variable should be included in the text, and have included notes on branching content within {}.
 
 ## Introduction
 
@@ -418,6 +434,8 @@ D: Establish next contact
 
 # Technical Notes
 
-The current session and all its data should be stored in browser storage to avoid loss of progress if the tab is accidentally closed.
+The current session and all its data (including timer elapsed time) are stored in browser localStorage to avoid loss of progress if the tab is accidentally closed. When the page is reloaded, the timer pauses at the previously elapsed time but can be resumed.
+
+**Section Completion Logic**: Sections with subsections only complete when all their subsections are complete. Subsections complete when all their cards are complete. Conditional cards (those hidden by `showIf` conditions) do not count toward completion if they are hidden.
 
 This is a desktop first web app built using vanilla JS, HTML and CSS. There is no need for mobile support - prioritise design simplicity.
