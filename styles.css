@@ -149,59 +149,33 @@ html, body {
 }
 
 /* ===========================
-   Card Styles
+   Article (Card) Behavior Styles
    =========================== */
 
-.card {
-    padding: 1.5rem;
-    background-color: var(--pico-card-background-color);
-    border: 1px solid var(--pico-muted-border-color);
-    border-radius: var(--pico-border-radius);
+article {
     transition: border-color 0.2s ease, opacity 0.2s ease;
 }
 
-.card.clickable {
+article.clickable {
     cursor: pointer;
 }
 
-.card.clickable:hover {
+article.clickable:hover {
     border-color: var(--pico-primary);
 }
 
-.card.completed {
+article.completed {
     opacity: 0.6;
 }
 
-.card.hidden {
+article.hidden {
     display: none;
 }
 
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-}
+/* ===========================
+   Content Styles
+   =========================== */
 
-.card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    flex: 1;
-    margin: 0;
-}
-
-.card-badge {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    background-color: var(--pico-primary-background);
-    color: var(--pico-primary);
-    letter-spacing: 0.5px;
-}
-
-.card-direction,
 .direction {
     color: var(--pico-muted-color);
     font-style: italic;
@@ -209,7 +183,6 @@ html, body {
     line-height: 1.6;
 }
 
-.card-verbatim,
 .verbatim {
     line-height: 1.6;
     margin-bottom: 0.75rem;

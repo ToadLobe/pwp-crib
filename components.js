@@ -66,8 +66,7 @@ function renderSectionHeader(sectionName, sectionId) {
  * @returns {HTMLElement} Card element
  */
 function renderCard(cardDef, state) {
-    const card = document.createElement('div');
-    card.className = 'card';
+    const card = document.createElement('article');
     card.dataset.cardId = cardDef.id;
 
     // Check if card is completed
