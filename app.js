@@ -219,11 +219,14 @@ function handleTimerToggle() {
  * Handle timer reset
  */
 function handleTimerReset() {
-    if (typeof resetTimer === 'function') {
-        const confirmed = confirm('Reset timer to 00:00?');
+    if (typeof resetAll === 'function') {
+        const confirmed = confirm('Reset everything (timer, inputs, and completion status)?');
         if (confirmed) {
-            resetTimer(); // Defined in state.js
+            resetAll(); // Defined in state.js
             updateStopwatch();
+            updateTimerToggleButton();
+            renderMainView();
+            renderSidebar();
         }
     }
 }
