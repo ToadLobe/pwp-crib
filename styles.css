@@ -224,6 +224,40 @@ article.hidden {
 }
 
 /* ===========================
+   Drug Information Display
+   =========================== */
+
+.drug-info-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.drug-info-box {
+    background-color: var(--pico-card-background-color);
+    border: 1px solid var(--pico-muted-border-color);
+    border-radius: var(--pico-border-radius);
+    padding: 0.75rem;
+}
+
+.drug-info-header {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--pico-primary);
+}
+
+.drug-info-text {
+    font-size: 0.9rem;
+    color: var(--pico-muted-color);
+    margin-bottom: 0.25rem;
+}
+
+.drug-info-text:last-child {
+    margin-bottom: 0;
+}
+
+/* ===========================
    Icon Buttons
    =========================== */
 

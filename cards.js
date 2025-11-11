@@ -298,7 +298,24 @@ const cards = [
         section: "information-gathering",
         subsection: "context",
         items: [
-            { type: "search", label: "Medication for mental health", stateKey: "mh-medication", options: ["None", "Sertraline", "Citalopram", "Fluoxetine", "Escitalopram", "Paroxetine", "Venlafaxine", "Duloxetine", "Mirtazapine", "Amitriptyline", "Propranolol", "Diazepam", "Lorazepam", "Quetiapine", "Olanzapine", "Other"] },
+            { type: "search", label: "Medication for mental health", stateKey: "mh-medication", options: [
+                { name: "None", role: "", dosage: "" },
+                { name: "Sertraline", role: "SSRI antidepressant", dosage: "50-200mg daily" },
+                { name: "Citalopram", role: "SSRI antidepressant", dosage: "20-40mg daily" },
+                { name: "Fluoxetine", role: "SSRI antidepressant", dosage: "20-80mg daily" },
+                { name: "Escitalopram", role: "SSRI antidepressant", dosage: "10-20mg daily" },
+                { name: "Paroxetine", role: "SSRI antidepressant", dosage: "20-50mg daily" },
+                { name: "Venlafaxine", role: "SNRI antidepressant", dosage: "75-225mg daily" },
+                { name: "Duloxetine", role: "SNRI antidepressant", dosage: "60-120mg daily" },
+                { name: "Mirtazapine", role: "Atypical antidepressant", dosage: "15-45mg nightly" },
+                { name: "Amitriptyline", role: "Tricyclic antidepressant", dosage: "50-200mg daily" },
+                { name: "Propranolol", role: "Beta-blocker for anxiety", dosage: "40-160mg daily" },
+                { name: "Diazepam", role: "Benzodiazepine for anxiety", dosage: "2-10mg as needed" },
+                { name: "Lorazepam", role: "Benzodiazepine for anxiety", dosage: "0.5-2mg as needed" },
+                { name: "Quetiapine", role: "Atypical antipsychotic", dosage: "25-300mg daily" },
+                { name: "Olanzapine", role: "Atypical antipsychotic", dosage: "5-20mg daily" },
+                { name: "Other", role: "", dosage: "" }
+            ] },
             { type: "input", inputType: "text", label: "Attitude towards medication", stateKey: "medication-attitude" }
         ]
     },
