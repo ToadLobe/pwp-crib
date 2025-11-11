@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PWP Assessment Tool - Mental Health Assessment Application">
+    <title>PWP Assessment Tool</title>
+
+    <!-- Tabler Icons CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons-outline.min.css">
+
+    <!-- Application Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header id="app-header">
+        <div class="header-left">
+            <div id="stopwatch-display" class="stopwatch">00:00</div>
+            <button id="timer-toggle" class="btn-icon" aria-label="Start timer">
+                <i class="ti ti-player-play"></i>
+            </button>
+            <button id="timer-reset" class="btn-icon" aria-label="Reset timer">
+                <i class="ti ti-rotate-clockwise"></i>
+            </button>
+        </div>
+        <div class="header-right">
+            <span id="patient-name">New Patient</span>
+        </div>
+    </header>
+
+    <!-- Fixed Sidebar -->
+    <aside id="app-sidebar">
+        <nav id="sidebar-nav">
+            <!-- Section navigation will be dynamically populated -->
+        </nav>
+    </aside>
+
+    <!-- Main Scrollable View -->
+    <main id="app-main">
+        <div id="cards-container">
+            <!-- Assessment cards will be dynamically populated -->
+        </div>
+    </main>
+
+    <!-- Application Scripts (order matters) -->
+    <script src="state.js"></script>
+    <script src="components.js"></script>
+    <script src="cards.js"></script>
+    <script src="utils.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

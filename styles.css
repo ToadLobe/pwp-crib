@@ -1,0 +1,470 @@
+/* ===========================
+   CSS Reset & Base Styles
+   =========================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+}
+
+/* ===========================
+   CSS Variables - Dark Theme
+   =========================== */
+
+:root {
+    /* Colors */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2a2a2a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #999;
+    --accent-blue: #4a9eff;
+    --accent-grey: #666;
+    --accent-red: #ff4444;
+
+    /* Spacing */
+    --radius: 8px;
+    --padding: 16px;
+    --gap: 12px;
+
+    /* Layout */
+    --header-height: 60px;
+    --sidebar-width: 200px;
+
+    /* Icons */
+    --icon-size: 18px;
+}
+
+/* ===========================
+   Layout Structure
+   =========================== */
+
+#app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--accent-grey);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--padding);
+    z-index: 100;
+}
+
+#app-sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--accent-grey);
+    overflow-y: auto;
+    padding: var(--padding);
+    z-index: 50;
+}
+
+#app-main {
+    position: fixed;
+    top: var(--header-height);
+    left: var(--sidebar-width);
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: var(--padding);
+    background-color: var(--bg-primary);
+}
+
+/* ===========================
+   Header Components
+   =========================== */
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-right {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.stopwatch {
+    font-size: 24px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+    transition: color 0.3s ease;
+}
+
+.stopwatch.overtime {
+    color: var(--accent-red);
+}
+
+/* ===========================
+   Sidebar Navigation
+   =========================== */
+
+#sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: var(--radius);
+    color: var(--accent-blue);
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-item:hover {
+    background-color: rgba(74, 158, 255, 0.1);
+}
+
+.sidebar-item.completed {
+    color: var(--accent-grey);
+}
+
+.sidebar-item .checkmark {
+    font-size: 16px;
+    color: var(--accent-grey);
+}
+
+/* ===========================
+   Cards Container
+   =========================== */
+
+#cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    max-width: 800px;
+}
+
+/* Section Headers */
+.section-header {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    scroll-margin-top: calc(var(--header-height) + 20px);
+}
+
+.section-header:first-child {
+    margin-top: 0;
+}
+
+.section-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* ===========================
+   Card Styles
+   =========================== */
+
+.card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--accent-grey);
+    border-radius: var(--radius);
+    padding: var(--padding);
+    transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.card.clickable {
+    cursor: pointer;
+}
+
+.card.clickable:hover {
+    border-color: var(--accent-blue);
+}
+
+.card.completed {
+    opacity: 0.6;
+}
+
+.card.hidden {
+    display: none;
+}
+
+/* Card Header */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    flex: 1;
+}
+
+.card-badge {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: rgba(74, 158, 255, 0.2);
+    color: var(--accent-blue);
+    letter-spacing: 0.5px;
+}
+
+/* Card Content Types */
+.card-direction {
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.card-verbatim {
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+/* ===========================
+   Input Components
+   =========================== */
+
+.input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.text-input,
+.number-input,
+.search-input {
+    flex: 1;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--accent-grey);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.text-input:focus,
+.number-input:focus,
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+.text-input::placeholder,
+.number-input::placeholder,
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* Search Dropdown */
+.search-container {
+    position: relative;
+    flex: 1;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--accent-grey);
+    border-radius: var(--radius);
+    margin-top: 4px;
+    z-index: 10;
+    display: none;
+}
+
+.search-dropdown.active {
+    display: block;
+}
+
+.search-option {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: background-color 0.2s ease;
+}
+
+.search-option:hover {
+    background-color: var(--bg-primary);
+}
+
+.search-option.no-results {
+    color: var(--text-secondary);
+    cursor: default;
+}
+
+.search-option.no-results:hover {
+    background-color: transparent;
+}
+
+/* ===========================
+   Buttons
+   =========================== */
+
+.btn,
+.btn-icon,
+.btn-add {
+    background-color: var(--accent-blue);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:hover,
+.btn-icon:hover,
+.btn-add:hover {
+    background-color: #3a8eef;
+}
+
+.btn:active,
+.btn-icon:active,
+.btn-add:active {
+    opacity: 0.8;
+}
+
+.btn-icon {
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+}
+
+.btn i,
+.btn-icon i,
+.btn-add i {
+    font-size: var(--icon-size);
+}
+
+/* ===========================
+   Chips (Tags)
+   =========================== */
+
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--accent-grey);
+    border-radius: var(--radius);
+    padding: 6px 12px;
+    font-size: 14px;
+    color: var(--text-primary);
+    transition: border-color 0.2s ease;
+}
+
+.chip:hover {
+    border-color: var(--accent-blue);
+}
+
+.chip-delete {
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1;
+    transition: color 0.2s ease;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.chip:hover .chip-delete {
+    opacity: 1;
+}
+
+.chip-delete:hover {
+    color: var(--accent-red);
+}
+
+/* ===========================
+   Scrollbar Styling
+   =========================== */
+
+#app-sidebar::-webkit-scrollbar,
+#app-main::-webkit-scrollbar,
+.search-dropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+#app-sidebar::-webkit-scrollbar-track,
+#app-main::-webkit-scrollbar-track,
+.search-dropdown::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+#app-sidebar::-webkit-scrollbar-thumb,
+#app-main::-webkit-scrollbar-thumb,
+.search-dropdown::-webkit-scrollbar-thumb {
+    background: var(--accent-grey);
+    border-radius: 4px;
+}
+
+#app-sidebar::-webkit-scrollbar-thumb:hover,
+#app-main::-webkit-scrollbar-thumb:hover,
+.search-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* ===========================
+   Utility Classes
+   =========================== */
+
+.hidden {
+    display: none !important;
+}
+
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+
+.mb-1 { margin-bottom: 8px; }
+.mb-2 { margin-bottom: 16px; }
+.mb-3 { margin-bottom: 24px; }

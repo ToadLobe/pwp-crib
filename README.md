@@ -1,6 +1,6 @@
 # Overview
 
-I am creating an interactive web app using HTML, CSS and Vanilla JS. The purpose of the app is to act as an interactive crib sheet for a PWP (mental health assessor) for use during a psychological assessment. I have attached two files for additional context: one is the official annotated mark scheme for a PWP assessment, and the other is an html version of a Notion file that has been serving as my current crib sheet. This crib sheet has been working okay for me, but I feel an interactive web app would drastically speed up the assessment by funnelling my attention to the correct and relevant questions/information based on previously gathered information. Much of the difficulty in conducting a PWP assessment comes from the fact that I am searching up and down my crib sheet for specific information, having to expand toggles to find relevant wording, and scanning diagnosis tables to make on-the-fly decisions that align with treatment frameworks.
+I am creating an interactive web app using HTML, CSS and Vanilla JS. The purpose of the app is to act as an interactive crib sheet for a PWP (mental health assessor) for use during a psychological assessment. I have attached two files for additional context: one is the official annotated mark scheme for a PWP assessment, and the other is an html version of a Notion file that has been serving as my current crib sheet. This crib sheet has been working okay for me, but I feel an interactive web app would drastically speed up the assessment by funnelling my attention to the correct and relevant questions/information based on previously gathered information. Much of the difficulty in conducting a PWP assessment comes from the fact that I am searching up and down my crib sheet for specific information, having to expand toggles to find relevant wording, and scanning diagnosis tables to make on-the-fly decisions that align with treatment frameworks. This tool is for personal use only.
 
 # Design
 
@@ -20,7 +20,7 @@ This sidebar serves several functions. It is an outline of the assessment struct
 
 This is where the entire assessment proccess is detailed. Content is seperated into 'cards'. Cards contain four categories of content: 'Direction', which are short written instructions. 'Verbatim', which is a block of text to read out word for word. 'Input' which is a text box or number input field. 'Search' which is a list of predefined values that can be filtered and selected from which will funnel later content.
 
-Note that input feilds and search lists allow for multiple descreet inputs via an 'add' button which are collated in a list below the input. Items from this list can be deleted using a bin icon.
+Note that input feilds and search lists allow for multiple descreet inputs via an 'add' button which are collated in a list of chips below the input. Items from this list can be deleted using a bin icon which appears when a chip is hovered over.
 
 Cards with only instructions and verbatim can be completed by simply clicking on them (they can be clicked again to uncomplete, like a checklist). Cards which contain an input or search selection will complete when their input list has at least one entry.
 
@@ -156,7 +156,7 @@ I: GAD-7 score
 
 ---
 
-{The content of this card varies based on the value of `phqScore` and `gadScore`.}
+{The content of this card varies based on the value of `phqScore` and `gadScore`. The threshold scores for each battery are common knowledge.}
 
 Verbatim for sub clinical scores: Your score on the {phq/gad} indicates that you are experiencing sub-clinical {depressive/anxiety} symptoms. What this means is that your score does not differ significantly from what we’d expect to see in the general population.
 
@@ -406,7 +406,7 @@ V: You can write the statement yourself, or I can write it for you. Which would 
 
 ---
 
-{Embed the patient's answers to questions in the problem, symptoms, impacts and goals sections here for quick reference}
+{Embed the patient's readonly answers to questions in the problem, symptoms, impacts and goals sections here for quick reference}
 
 I: Problem statement
 
@@ -425,3 +425,5 @@ D: Establish next contact
 # Technical Notes
 
 The current session and all its data should be stored in broswer storage to avoid loss of progress if the tab is accidentaly closed.
+
+This is a dekstop first web app built using vanilla JS, HTML and CSS. There is no need for mobile support - prioritise design simplicity.
