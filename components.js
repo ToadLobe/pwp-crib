@@ -192,15 +192,23 @@ function renderInput(item, state) {
     const label = document.createElement('label');
     label.className = 'input-label';
     label.textContent = item.label;
+    label.htmlFor = `input-${item.stateKey}`;
     group.appendChild(label);
 
-    // Input row (input + button)
+    // Input row (input + button) with role="group"
     const inputRow = document.createElement('div');
     inputRow.className = 'input-row';
+    inputRow.setAttribute('role', 'group');
 
-    // Input field
-    const input = document.createElement('input');
-    input.type = item.inputType || 'text';
+    // Input field (or textarea for multiline)
+    let input;
+    if (item.multiline) {
+        input = document.createElement('textarea');
+        input.rows = 4;
+    } else {
+        input = document.createElement('input');
+        input.type = item.inputType || 'text';
+    }
     input.className = 'input-field';
     input.id = `input-${item.stateKey}`;
     input.placeholder = item.inputType === 'number' ? '0' : 'Type here...';
@@ -248,7 +256,7 @@ function renderSearch(item, state) {
 
     // Search input
     const input = document.createElement('input');
-    input.type = 'text';
+    input.type = 'search';
     input.className = 'search-input';
     input.placeholder = 'Type to search...';
     input.autocomplete = 'off';
