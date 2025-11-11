@@ -15,9 +15,9 @@ function renderCards(container) {
 
     container.innerHTML = '';
 
-    // Group cards by section
+    // Group cards by section and subsection
     sections.forEach(section => {
-        // Filter cards for this section that should be shown
+        // Filter cards for this section
         const sectionCards = allCards.filter(card => {
             if (card.section !== section.id) return false;
 
@@ -35,13 +35,35 @@ function renderCards(container) {
         const sectionHeader = renderSectionHeader(section.name, section.id);
         container.appendChild(sectionHeader);
 
-        // Render each card in the section
-        sectionCards.forEach(card => {
-            const cardElement = renderCard(card, state);
-            if (cardElement) {
-                container.appendChild(cardElement);
-            }
-        });
+        // If section has subsections, group cards by subsection
+        if (section.subsections && section.subsections.length > 0) {
+            section.subsections.forEach(subsection => {
+                // Filter cards for this subsection
+                const subsectionCards = sectionCards.filter(card => card.subsection === subsection.id);
+
+                if (subsectionCards.length === 0) return;
+
+                // Render subsection header
+                const subsectionHeader = renderSectionHeader(subsection.name, subsection.id, true);
+                container.appendChild(subsectionHeader);
+
+                // Render each card in the subsection
+                subsectionCards.forEach(card => {
+                    const cardElement = renderCard(card, state);
+                    if (cardElement) {
+                        container.appendChild(cardElement);
+                    }
+                });
+            });
+        } else {
+            // No subsections, render cards directly
+            sectionCards.forEach(card => {
+                const cardElement = renderCard(card, state);
+                if (cardElement) {
+                    container.appendChild(cardElement);
+                }
+            });
+        }
     });
 }
 
@@ -49,11 +71,12 @@ function renderCards(container) {
  * Render a section header
  * @param {string} sectionName - The display name of the section
  * @param {string} sectionId - The ID of the section for scrolling
+ * @param {boolean} isSubsection - Whether this is a subsection header
  * @returns {HTMLElement} Section header element
  */
-function renderSectionHeader(sectionName, sectionId) {
-    const header = document.createElement('h2');
-    header.className = 'section-header';
+function renderSectionHeader(sectionName, sectionId, isSubsection = false) {
+    const header = document.createElement(isSubsection ? 'h3' : 'h2');
+    header.className = isSubsection ? 'subsection-header' : 'section-header';
     header.id = sectionId;
     header.textContent = sectionName;
     return header;
@@ -69,13 +92,34 @@ function renderCard(cardDef, state) {
     const card = document.createElement('article');
     card.dataset.cardId = cardDef.id;
 
-    // Check if card is completed
-    const isCompleted = state.completed[cardDef.id] || false;
-
     // Check if card has any input items
     const hasInputs = cardDef.items.some(item =>
         item.type === 'input' || item.type === 'search'
     );
+
+    // Determine if card is completed
+    let isCompleted = false;
+
+    if (hasInputs) {
+        // Auto-complete if any input/search field has at least one entry
+        isCompleted = cardDef.items.some(item => {
+            if (item.type === 'input' || item.type === 'search') {
+                const values = state.inputs[item.stateKey] || [];
+                return values.length > 0;
+            }
+            return false;
+        });
+
+        // Update state to reflect auto-completion
+        if (isCompleted && !state.completed[cardDef.id]) {
+            state.completed[cardDef.id] = true;
+        } else if (!isCompleted && state.completed[cardDef.id]) {
+            state.completed[cardDef.id] = false;
+        }
+    } else {
+        // Manual completion for cards without inputs
+        isCompleted = state.completed[cardDef.id] || false;
+    }
 
     // Add completed class if completed
     if (isCompleted) {
@@ -114,6 +158,8 @@ function renderCardItem(item, state) {
             return renderInput(item, state);
         case 'search':
             return renderSearch(item, state);
+        case 'diagram-link':
+            return renderDiagramLink(item, state);
         default:
             console.warn('Unknown item type:', item.type);
             return null;
@@ -319,6 +365,112 @@ function renderChips(stateKey, values) {
     });
 
     return chipList;
+}
+
+/**
+ * Render a diagram link (button that opens CBT diagram in new tab)
+ * @param {Object} item - The diagram link item
+ * @param {Object} state - The current application state
+ * @returns {HTMLElement} Diagram link element
+ */
+function renderDiagramLink(item, state) {
+    const div = document.createElement('div');
+    div.className = 'direction';
+
+    const button = document.createElement('button');
+    button.className = 'btn';
+    button.innerHTML = `<i class="ti ti-external-link"></i> ${item.label}`;
+    button.onclick = () => openCBTDiagram(state);
+
+    div.appendChild(button);
+    return div;
+}
+
+/**
+ * Open CBT cycle diagram in a new tab
+ * @param {Object} state - The current application state
+ */
+function openCBTDiagram(state) {
+    // Get patient symptoms
+    const sensations = (state.inputs['sensations'] || []).join(', ') || 'Physical sensations';
+    const behaviours = (state.inputs['behaviours'] || []).join(', ') || 'Behaviours';
+    const thoughts = (state.inputs['thoughts'] || []).join(', ') || 'Thoughts';
+
+    // Generate HTML for diagram
+    const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT Cycle Diagram</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1a1a1a;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        svg {
+            max-width: 800px;
+            width: 100%;
+            height: auto;
+        }
+        text {
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <svg viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg">
+        <!-- Connection lines -->
+        <line x1="400" y1="150" x2="250" y2="450" stroke="#888" stroke-width="2" />
+        <line x1="550" y1="450" x2="250" y2="450" stroke="#888" stroke-width="2" />
+        <line x1="400" y1="150" x2="550" y2="450" stroke="#888" stroke-width="2" />
+
+        <!-- Thoughts circle (top) -->
+        <circle cx="400" cy="150" r="120" fill="#2c3e50" stroke="#3498db" stroke-width="3" />
+        <text x="400" y="130" text-anchor="middle" fill="#3498db" font-size="18" font-weight="bold">Thoughts</text>
+        <text x="400" y="155" text-anchor="middle" fill="#fff" font-size="14" style="max-width: 200px;">
+            <tspan x="400" dy="0">${thoughts.substring(0, 30)}</tspan>
+            ${thoughts.length > 30 ? `<tspan x="400" dy="20">${thoughts.substring(30, 60)}</tspan>` : ''}
+        </text>
+
+        <!-- Sensations circle (bottom left) -->
+        <circle cx="250" cy="450" r="120" fill="#2c3e50" stroke="#e74c3c" stroke-width="3" />
+        <text x="250" y="430" text-anchor="middle" fill="#e74c3c" font-size="18" font-weight="bold">Sensations</text>
+        <text x="250" y="455" text-anchor="middle" fill="#fff" font-size="14">
+            <tspan x="250" dy="0">${sensations.substring(0, 30)}</tspan>
+            ${sensations.length > 30 ? `<tspan x="250" dy="20">${sensations.substring(30, 60)}</tspan>` : ''}
+        </text>
+
+        <!-- Behaviours circle (bottom right) -->
+        <circle cx="550" cy="450" r="120" fill="#2c3e50" stroke="#2ecc71" stroke-width="3" />
+        <text x="550" y="430" text-anchor="middle" fill="#2ecc71" font-size="18" font-weight="bold">Behaviours</text>
+        <text x="550" y="455" text-anchor="middle" fill="#fff" font-size="14">
+            <tspan x="550" dy="0">${behaviours.substring(0, 30)}</tspan>
+            ${behaviours.length > 30 ? `<tspan x="550" dy="20">${behaviours.substring(30, 60)}</tspan>` : ''}
+        </text>
+
+        <!-- Title -->
+        <text x="400" y="630" text-anchor="middle" fill="#fff" font-size="24" font-weight="bold">CBT Cycle</text>
+    </svg>
+</body>
+</html>
+    `.trim();
+
+    // Open in new tab
+    const newTab = window.open();
+    if (newTab) {
+        newTab.document.write(html);
+        newTab.document.close();
+    } else {
+        alert('Please allow popups to view the CBT diagram.');
+    }
 }
 
 /**
