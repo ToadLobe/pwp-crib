@@ -203,6 +203,9 @@ function setupEventListeners() {
     // Search input handling
     document.getElementById('cards-container').addEventListener('focus', handleInputFocus, true);
     document.getElementById('cards-container').addEventListener('blur', handleInputBlur, true);
+
+    // Enter key handling for input fields
+    document.getElementById('cards-container').addEventListener('keydown', handleInputKeydown);
 }
 
 /**
@@ -381,6 +384,52 @@ function handleInputBlur(event) {
                 dropdown.classList.remove('active');
             }
         }, 200);
+    }
+}
+
+/**
+ * Handle keydown events on input fields (Enter key to submit)
+ */
+function handleInputKeydown(event) {
+    // Check if Enter key was pressed
+    if (event.key !== 'Enter') return;
+
+    // Handle regular input fields
+    if (event.target.classList.contains('input-field')) {
+        event.preventDefault();
+
+        // Find the associated add button
+        const inputRow = event.target.closest('.input-row');
+        if (inputRow) {
+            const addButton = inputRow.querySelector('.btn-add');
+            if (addButton) {
+                addButton.click();
+            }
+        }
+    }
+
+    // Handle search input fields
+    if (event.target.classList.contains('search-input')) {
+        event.preventDefault();
+
+        // Find the first visible search option and click it
+        const searchContainer = event.target.parentElement;
+        if (searchContainer) {
+            const dropdown = searchContainer.querySelector('.search-dropdown');
+            if (dropdown) {
+                const visibleOptions = Array.from(dropdown.querySelectorAll('.search-option'))
+                    .filter(option =>
+                        option.style.display !== 'none' &&
+                        !option.classList.contains('no-results')
+                    );
+
+                if (visibleOptions.length > 0) {
+                    visibleOptions[0].click();
+                    // Clear the search input
+                    event.target.value = '';
+                }
+            }
+        }
     }
 }
 
