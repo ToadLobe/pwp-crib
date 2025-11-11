@@ -487,7 +487,7 @@ const cards = [
                 type: "direction",
                 content: "Summary for reference - Problem: ${core-problem}, Symptoms: ${sensations}, ${behaviours}, ${thoughts}, Impacts: ${impact-work}, ${impact-home}, Goals: ${goals}"
             },
-            { type: "input", inputType: "text", label: "Problem statement", stateKey: "problem-statement" },
+            { type: "input", inputType: "text", label: "Problem statement", stateKey: "problem-statement", multiline: true },
             { type: "direction", content: "Read it back to the patient and confirm it fits their experience." }
         ]
     },

@@ -219,7 +219,7 @@ function handleSidebarClick(event) {
  */
 function handleMainViewClick(event) {
     // Handle card completion toggle
-    const card = event.target.closest('.card.clickable');
+    const card = event.target.closest('article.clickable');
     if (card && !event.target.closest('.btn, .btn-add, .chip-delete, input')) {
         handleCardClick(card);
         return;
