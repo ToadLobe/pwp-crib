@@ -299,7 +299,7 @@ function checkSectionComplete(sectionId) {
 
 /**
  * Update section completion status for all sections
- * This will be properly implemented when cards.js is loaded
+ * Uses updateSectionCompletion from cards.js when available
  */
 function updateAllSectionCompletion() {
     if (!state) return;
@@ -309,8 +309,10 @@ function updateAllSectionCompletion() {
         state.sections = {};
     }
 
-    // This will be enhanced when cards.js is loaded with actual card data
-    // For now, we keep existing section completion states
+    // Call updateSectionCompletion from cards.js if available
+    if (typeof updateSectionCompletion === 'function') {
+        updateSectionCompletion();
+    }
 }
 
 /**

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Test - PWP Assessment Tool</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons-outline.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .test-section {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px;
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #93c5fd;
+        }
+        .success { color: #4ade80; }
+        .error { color: #f87171; }
+    </style>
+</head>
+<body>
+    <div class="test-section">
+        <h2>Integration Test Results</h2>
+        <div id="test-results"></div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="state.js"></script>
+    <script src="cards.js"></script>
+    <script src="components.js"></script>
+    <script>
+        const results = [];
+
+        function test(name, fn) {
+            try {
+                fn();
+                results.push(`<div class="success">✓ ${name}</div>`);
+            } catch (error) {
+                results.push(`<div class="error">✗ ${name}: ${error.message}</div>`);
+            }
+        }
+
+        // Test state.js
+        test('State loads successfully', () => {
+            loadState();
+            if (!state) throw new Error('State is null');
+        });
+
+        test('State has correct structure', () => {
+            if (!state.hasOwnProperty('sessionId')) throw new Error('Missing sessionId');
+            if (!state.hasOwnProperty('inputs')) throw new Error('Missing inputs');
+            if (!state.hasOwnProperty('completed')) throw new Error('Missing completed');
+        });
+
+        // Test cards.js
+        test('getSections() returns 5 sections', () => {
+            const sections = getSections();
+            if (sections.length !== 5) throw new Error(`Expected 5 sections, got ${sections.length}`);
+        });
+
+        test('getCards() returns 35 cards', () => {
+            const cards = getCards();
+            if (cards.length !== 35) throw new Error(`Expected 35 cards, got ${cards.length}`);
+        });
+
+        test('Cards have required properties', () => {
+            const cards = getCards();
+            const firstCard = cards[0];
+            if (!firstCard.id) throw new Error('Card missing id');
+            if (!firstCard.section) throw new Error('Card missing section');
+            if (!firstCard.items) throw new Error('Card missing items');
+        });
+
+        // Test components.js
+        test('renderCard() creates a card element', () => {
+            const cards = getCards();
+            const card = renderCard(cards[0], state);
+            if (!card) throw new Error('renderCard returned null');
+            if (card.tagName !== 'DIV') throw new Error('Card is not a DIV element');
+        });
+
+        test('renderDirection() creates direction box', () => {
+            const item = { type: 'direction', content: 'Test direction' };
+            const element = renderDirection(item, state);
+            if (!element.classList.contains('direction')) throw new Error('Missing direction class');
+        });
+
+        test('renderVerbatim() creates verbatim box', () => {
+            const item = { type: 'verbatim', content: 'Test verbatim' };
+            const element = renderVerbatim(item, state);
+            if (!element.classList.contains('verbatim')) throw new Error('Missing verbatim class');
+        });
+
+        test('renderInput() creates input group', () => {
+            const item = { type: 'input', inputType: 'text', label: 'Test', stateKey: 'test' };
+            const element = renderInput(item, state);
+            if (!element.classList.contains('input-group')) throw new Error('Missing input-group class');
+        });
+
+        test('renderSearch() creates search group', () => {
+            const item = { type: 'search', label: 'Test', stateKey: 'test', options: ['A', 'B'] };
+            const element = renderSearch(item, state);
+            if (!element.classList.contains('search-group')) throw new Error('Missing search-group class');
+        });
+
+        // Test conditional cards
+        test('Conditional cards work (roms-feedback)', () => {
+            const cards = getCards();
+            const romsFeedback = cards.find(c => c.id === 'roms-feedback');
+            if (!romsFeedback) throw new Error('roms-feedback card not found');
+            if (!romsFeedback.showIf) throw new Error('showIf not defined');
+
+            // Test when no scores
+            if (romsFeedback.showIf(state)) throw new Error('Should not show without scores');
+
+            // Add a score
+            addEntry('phq9-score', 12);
+            if (!romsFeedback.showIf(state)) throw new Error('Should show with scores');
+        });
+
+        test('Dynamic content works (treatment-info)', () => {
+            const cards = getCards();
+            const treatmentInfo = cards.find(c => c.id === 'treatment-info');
+            if (!treatmentInfo) throw new Error('treatment-info card not found');
+
+            // Add treatment selection
+            addEntry('treatment', 'LiCBT');
+
+            const verbatimItem = treatmentInfo.items.find(i => i.type === 'verbatim');
+            if (typeof verbatimItem.content !== 'function') throw new Error('Content should be a function');
+
+            const text = verbatimItem.content(state);
+            if (!text.includes('guided self-help')) throw new Error('Wrong treatment text');
+        });
+
+        // Test variable interpolation
+        test('Variable interpolation works', () => {
+            addEntry('patient-name', 'John');
+            const text = interpolateContent('Hello ${name}', state);
+            if (!text.includes('John')) throw new Error('Variable not interpolated');
+        });
+
+        test('Section completion tracking works', () => {
+            // Mark intro cards as complete
+            toggleCardComplete('intro-1');
+            toggleCardComplete('intro-2');
+
+            // Update section completion
+            updateSectionCompletion();
+
+            if (!state.sections['introduction']) throw new Error('Introduction section should be complete');
+        });
+
+        // Test timer functions
+        test('Timer starts and updates', () => {
+            const initialElapsed = state.elapsedTime;
+            startTimer();
+            if (!state.isRunning) throw new Error('Timer not running');
+
+            // Simulate time passing
+            setTimeout(() => {
+                updateTimer();
+                if (state.elapsedTime <= initialElapsed) throw new Error('Elapsed time not updating');
+            }, 100);
+        });
+
+        // Display results
+        setTimeout(() => {
+            document.getElementById('test-results').innerHTML = results.join('');
+
+            const successCount = results.filter(r => r.includes('success')).length;
+            const totalCount = results.length;
+
+            document.getElementById('test-results').innerHTML +=
+                `<div style="margin-top: 20px; font-weight: bold;">` +
+                `${successCount}/${totalCount} tests passed</div>`;
+        }, 200);
+    </script>
+</body>
+</html>
