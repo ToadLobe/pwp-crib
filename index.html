@@ -16,24 +16,19 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Fixed Header -->
-    <header id="app-header">
-        <div class="header-left">
-            <div id="stopwatch-display" class="stopwatch">00:00</div>
-            <button id="timer-toggle" class="btn-icon" aria-label="Start timer">
-                <i class="ti ti-player-play"></i>
-            </button>
-            <button id="timer-reset" class="btn-icon" aria-label="Reset timer">
-                <i class="ti ti-rotate-clockwise"></i>
-            </button>
-        </div>
-        <div class="header-right">
-            <span id="patient-name">New Patient</span>
-        </div>
-    </header>
-
     <!-- Fixed Sidebar -->
     <aside id="app-sidebar">
+        <div class="timer-container">
+            <div id="stopwatch-display" class="stopwatch">00:00</div>
+            <div class="timer-controls">
+                <button id="timer-toggle" class="btn-icon" aria-label="Start timer">
+                    <i class="ti ti-player-play"></i>
+                </button>
+                <button id="timer-reset" class="btn-icon" aria-label="Reset timer">
+                    <i class="ti ti-rotate-clockwise"></i>
+                </button>
+            </div>
+        </div>
         <nav id="sidebar-nav">
             <!-- Section navigation will be dynamically populated -->
         </nav>
