@@ -62,6 +62,7 @@ function renderSidebar() {
         const sections = getSections();
 
         sections.forEach(section => {
+            // Render main section
             const item = document.createElement('div');
             item.className = 'sidebar-item';
             item.dataset.sectionId = section.id;
@@ -79,6 +80,29 @@ function renderSidebar() {
             }
 
             sidebarNav.appendChild(item);
+
+            // Render subsections if they exist
+            if (section.subsections && section.subsections.length > 0) {
+                section.subsections.forEach(subsection => {
+                    const subItem = document.createElement('div');
+                    subItem.className = 'sidebar-item sidebar-subitem';
+                    subItem.dataset.sectionId = subsection.id;
+
+                    // Check if subsection is completed
+                    const subIsCompleted = typeof isSectionComplete === 'function'
+                        ? isSectionComplete(subsection.id)
+                        : false;
+
+                    if (subIsCompleted) {
+                        subItem.classList.add('completed');
+                        subItem.innerHTML = `<span class="checkmark">✓</span><span>${subsection.name}</span>`;
+                    } else {
+                        subItem.textContent = subsection.name;
+                    }
+
+                    sidebarNav.appendChild(subItem);
+                });
+            }
         });
     } else {
         // Placeholder when cards.js isn't loaded yet

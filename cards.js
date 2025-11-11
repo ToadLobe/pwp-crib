@@ -3,13 +3,40 @@
  * All assessment cards and sections
  */
 
-// Section definitions
+// Section definitions with subsections
 const sections = [
     { id: "introduction", name: "Introduction" },
-    { id: "information-gathering", name: "Information Gathering" },
-    { id: "information-giving", name: "Information Giving" },
+    {
+        id: "information-gathering",
+        name: "Information Gathering",
+        subsections: [
+            { id: "problem", name: "Problem" },
+            { id: "symptoms", name: "Symptoms" },
+            { id: "impacts", name: "Impacts" },
+            { id: "roms", name: "ROMs" },
+            { id: "safety", name: "Safety" },
+            { id: "context", name: "Context" },
+            { id: "goals", name: "Goals" }
+        ]
+    },
+    {
+        id: "information-giving",
+        name: "Information Giving",
+        subsections: [
+            { id: "diagnosis", name: "Diagnosis" },
+            { id: "cbt", name: "CBT" },
+            { id: "treatment", name: "Treatment Options" }
+        ]
+    },
     { id: "shared-decision-making", name: "Shared Decision Making" },
-    { id: "ending", name: "Ending" }
+    {
+        id: "ending",
+        name: "Ending",
+        subsections: [
+            { id: "problem-statement", name: "Problem Statement" },
+            { id: "next-steps", name: "Next Steps" }
+        ]
+    }
 ];
 
 // All card definitions
@@ -44,6 +71,7 @@ const cards = [
     {
         id: "problem-1",
         section: "information-gathering",
+        subsection: "problem",
         items: [
             { type: "verbatim", content: "So ${name}, could you tell me a little bit about what's brought you here today?" },
             { type: "input", inputType: "text", label: "Core problem", stateKey: "core-problem" },
@@ -53,6 +81,7 @@ const cards = [
     {
         id: "problem-2",
         section: "information-gathering",
+        subsection: "problem",
         items: [
             { type: "direction", content: "Explore the three Ws." },
             { type: "verbatim", content: "Is there a specific place or situation where..." },
@@ -66,6 +95,7 @@ const cards = [
     {
         id: "problem-3",
         section: "information-gathering",
+        subsection: "problem",
         items: [
             { type: "verbatim", content: "Have you noticed anything specific that triggers this feeling?" },
             { type: "input", inputType: "text", label: "Triggers", stateKey: "triggers" }
@@ -78,6 +108,7 @@ const cards = [
     {
         id: "symptoms-1",
         section: "information-gathering",
+        subsection: "symptoms",
         items: [
             { type: "verbatim", content: "To help me get a really clear picture, I'm going to ask some specific questions about three areas, and those are your physical sensations, your behaviours, and your thoughts. So starting with your physical sensations..." },
             { type: "input", inputType: "text", label: "Sensations", stateKey: "sensations" },
@@ -90,6 +121,7 @@ const cards = [
     {
         id: "symptoms-2",
         section: "information-gathering",
+        subsection: "symptoms",
         items: [
             { type: "direction", content: "Summarise symptoms back to the patient." }
         ]
@@ -101,6 +133,7 @@ const cards = [
     {
         id: "impacts-1",
         section: "information-gathering",
+        subsection: "impacts",
         items: [
             { type: "direction", content: "Ask about the impact of the patient's symptoms on aspects of their life." },
             { type: "input", inputType: "text", label: "Impact at work", stateKey: "impact-work" },
@@ -117,6 +150,7 @@ const cards = [
     {
         id: "roms-1",
         section: "information-gathering",
+        subsection: "roms",
         items: [
             { type: "verbatim", content: "Now I'd like to ask you to complete a couple of short questionnaires. They're just help us get a snapshot of how you've been feeling over the last two weeks and help us track your progress." },
             { type: "direction", content: "Pass the patient the ROMS." },
@@ -129,6 +163,7 @@ const cards = [
     {
         id: "roms-feedback",
         section: "information-gathering",
+        subsection: "roms",
         showIf: (state) => state.inputs["phq9-score"]?.[0] >= 0 || state.inputs["gad7-score"]?.[0] >= 0,
         items: [
             {
@@ -165,6 +200,7 @@ const cards = [
     {
         id: "safety-1",
         section: "information-gathering",
+        subsection: "safety",
         items: [
             { type: "verbatim", content: "When we experience mental health difficulties, it's common to have thoughts about things like suicide and self-harm, so we're going to complete a safety assessment now which will ask about these and other areas of your safety. We do this at every appointment with every patient, because someone's safety can change quickly." },
             { type: "direction", content: "Ask the following questions. If the patient answers anything other than 'no' for a question, funnel using FIDO and potentially create a safety plan at the end." },
@@ -189,6 +225,7 @@ const cards = [
     {
         id: "safety-2",
         section: "information-gathering",
+        subsection: "safety",
         items: [
             { type: "verbatim", content: "If your answers to any of these questions were to change, do you know who you would speak to or where you would go?" },
             { type: "direction", content: "Give the patient the safety information sheet." }
@@ -197,6 +234,7 @@ const cards = [
     {
         id: "safety-3",
         section: "information-gathering",
+        subsection: "safety",
         items: [
             { type: "direction", content: "Confirm the patient's score of ${phq9q9score} on the PHQ-9 Q9 is consistent with their responses." }
         ]
@@ -204,6 +242,7 @@ const cards = [
     {
         id: "safety-4",
         section: "information-gathering",
+        subsection: "safety",
         items: [
             { type: "direction", content: "Summarise the patient's answers to the safety assessment." },
             { type: "search", label: "Safety plan required?", stateKey: "safety-plan-required", options: ["yes", "no"] }
@@ -212,6 +251,7 @@ const cards = [
     {
         id: "safety-plan",
         section: "information-gathering",
+        subsection: "safety",
         showIf: (state) => state.inputs["safety-plan-required"]?.[0] === "yes",
         items: [
             { type: "input", inputType: "text", label: "Early warning signs", stateKey: "warning-signs" },
@@ -228,6 +268,7 @@ const cards = [
     {
         id: "context-1",
         section: "information-gathering",
+        subsection: "context",
         items: [
             { type: "verbatim", content: "Now I'd like to ask you some broader questions to get some more context." },
             { type: "search", label: "Other mental health conditions", stateKey: "other-mh-conditions", options: ["None", "Depression", "Generalised Anxiety Disorder", "Panic Disorder", "Agoraphobia", "Social Phobia", "Specific Phobia", "OCD", "PTSD", "Bipolar Disorder", "Schizophrenia", "Personality Disorder", "Eating Disorder", "ADHD", "Autism", "Other"] },
@@ -237,6 +278,7 @@ const cards = [
     {
         id: "context-2",
         section: "information-gathering",
+        subsection: "context",
         items: [
             { type: "input", inputType: "text", label: "Onset", stateKey: "onset" },
             { type: "input", inputType: "text", label: "Motivation for seeking help now", stateKey: "motivation-now" }
@@ -245,6 +287,7 @@ const cards = [
     {
         id: "context-3",
         section: "information-gathering",
+        subsection: "context",
         items: [
             { type: "input", inputType: "text", label: "Current treatments", stateKey: "current-treatments" },
             { type: "input", inputType: "text", label: "Past treatments", stateKey: "past-treatments" }
@@ -253,6 +296,7 @@ const cards = [
     {
         id: "context-4",
         section: "information-gathering",
+        subsection: "context",
         items: [
             { type: "search", label: "Medication for mental health", stateKey: "mh-medication", options: ["None", "Sertraline", "Citalopram", "Fluoxetine", "Escitalopram", "Paroxetine", "Venlafaxine", "Duloxetine", "Mirtazapine", "Amitriptyline", "Propranolol", "Diazepam", "Lorazepam", "Quetiapine", "Olanzapine", "Other"] },
             { type: "input", inputType: "text", label: "Attitude towards medication", stateKey: "medication-attitude" }
@@ -261,6 +305,7 @@ const cards = [
     {
         id: "context-5",
         section: "information-gathering",
+        subsection: "context",
         items: [
             { type: "verbatim", content: "You might have come here today with some expectations regarding treatment and what we do at NHS TT. Do you have any specific expectations?" },
             { type: "input", inputType: "text", label: "Expectations", stateKey: "expectations" }
@@ -269,6 +314,7 @@ const cards = [
     {
         id: "context-6",
         section: "information-gathering",
+        subsection: "context",
         items: [
             { type: "direction", content: "Ask about substance use, and specifically if it has changed." },
             { type: "input", inputType: "text", label: "Caffeine consumption", stateKey: "caffeine" },
@@ -279,6 +325,7 @@ const cards = [
     {
         id: "context-7",
         section: "information-gathering",
+        subsection: "context",
         items: [
             { type: "direction", content: "Ask explicitly if there is anything else the patient would like to mention." }
         ]
@@ -286,6 +333,7 @@ const cards = [
     {
         id: "goals",
         section: "information-gathering",
+        subsection: "goals",
         items: [
             { type: "direction", content: "Establish clear, specific and measurable patient goals." },
             { type: "input", inputType: "text", label: "Patient goals", stateKey: "goals" }
@@ -298,6 +346,7 @@ const cards = [
     {
         id: "diagnosis-1",
         section: "information-giving",
+        subsection: "diagnosis",
         items: [
             { type: "search", label: "Diagnosis", stateKey: "diagnosis", options: ["Depression", "GAD", "Panic Disorder", "Agoraphobia", "Agoraphobia with Panic Disorder", "Phobia", "OCD", "PTSD", "Social Phobia", "Hypochondriasis", "BDD"] }
         ]
@@ -305,6 +354,7 @@ const cards = [
     {
         id: "diagnosis-info",
         section: "information-giving",
+        subsection: "diagnosis",
         showIf: (state) => state.inputs["diagnosis"]?.[0],
         items: [
             {
@@ -367,10 +417,11 @@ const cards = [
     {
         id: "cbt-1",
         section: "information-giving",
+        subsection: "cbt",
         items: [
             { type: "verbatim", content: "Many of the treatments we offer at NHS TT are based on CBT, which stands for cognitive behavioural therapy. Can I ask if you've heard of CBT before?" },
             { type: "direction", content: "Explain CBT using the patient's symptoms as examples." },
-            { type: "direction", content: "Show CBT cycle diagram with patient's Sensations, Behaviours, and Thoughts in three interconnected circles." },
+            { type: "diagram-link", label: "Show CBT cycle diagram" },
             { type: "direction", content: "Check patient understanding." },
             { type: "direction", content: "Explain how the CBT cycle can be broken using therapy." },
             { type: "direction", content: "Check patient understanding again." }
@@ -383,6 +434,7 @@ const cards = [
     {
         id: "treatment-decision",
         section: "information-giving",
+        subsection: "treatment",
         items: [
             {
                 type: "direction",
@@ -413,6 +465,7 @@ const cards = [
     {
         id: "treatment-info",
         section: "information-giving",
+        subsection: "treatment",
         showIf: (state) => state.inputs["treatment"]?.[0],
         items: [
             {
@@ -474,6 +527,7 @@ const cards = [
     {
         id: "ending-1",
         section: "ending",
+        subsection: "problem-statement",
         items: [
             { type: "verbatim", content: "What I'd like to do now is to draw all the main points we've discussed into one single summary. We call this a 'problem statement', and its very useful because it gives us a baseline or starting point for treatment. We can look back at it later to help us track your progress, see which parts are getting better, and identify if we need to make any adjustments to our plan. Does that make sense?" },
             { type: "verbatim", content: "You can write the statement yourself, or I can write it for you. Which would you prefer?" }
@@ -482,6 +536,7 @@ const cards = [
     {
         id: "ending-2",
         section: "ending",
+        subsection: "problem-statement",
         items: [
             {
                 type: "direction",
@@ -494,6 +549,7 @@ const cards = [
     {
         id: "ending-3",
         section: "ending",
+        subsection: "next-steps",
         items: [
             { type: "direction", content: "Reiterate next steps" },
             { type: "direction", content: "Ask patient to reflect back and record next steps" },
@@ -526,23 +582,54 @@ function updateSectionCompletion() {
     if (!state) return;
 
     sections.forEach(section => {
-        // Get all cards in this section
-        const sectionCards = cards.filter(card => {
-            if (card.section !== section.id) return false;
+        // If section has subsections, check each subsection
+        if (section.subsections && section.subsections.length > 0) {
+            section.subsections.forEach(subsection => {
+                // Get all cards in this subsection
+                const subsectionCards = cards.filter(card => {
+                    if (card.section !== section.id || card.subsection !== subsection.id) return false;
 
-            // Don't count cards that are conditionally hidden
-            if (card.showIf && typeof card.showIf === 'function') {
-                if (!card.showIf(state)) return false;
-            }
+                    // Don't count cards that are conditionally hidden
+                    if (card.showIf && typeof card.showIf === 'function') {
+                        if (!card.showIf(state)) return false;
+                    }
 
-            return true;
-        });
+                    return true;
+                });
 
-        // Check if all cards in section are completed
-        const allCompleted = sectionCards.length > 0 && sectionCards.every(card => {
-            return state.completed[card.id] === true;
-        });
+                // Check if all cards in subsection are completed
+                const allCompleted = subsectionCards.length > 0 && subsectionCards.every(card => {
+                    return state.completed[card.id] === true;
+                });
 
-        state.sections[section.id] = allCompleted;
+                state.sections[subsection.id] = allCompleted;
+            });
+
+            // Section is complete if all subsections are complete
+            const allSubsectionsComplete = section.subsections.every(subsection => {
+                return state.sections[subsection.id] === true;
+            });
+
+            state.sections[section.id] = allSubsectionsComplete;
+        } else {
+            // Get all cards in this section (no subsections)
+            const sectionCards = cards.filter(card => {
+                if (card.section !== section.id) return false;
+
+                // Don't count cards that are conditionally hidden
+                if (card.showIf && typeof card.showIf === 'function') {
+                    if (!card.showIf(state)) return false;
+                }
+
+                return true;
+            });
+
+            // Check if all cards in section are completed
+            const allCompleted = sectionCards.length > 0 && sectionCards.every(card => {
+                return state.completed[card.id] === true;
+            });
+
+            state.sections[section.id] = allCompleted;
+        }
     });
 }

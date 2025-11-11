@@ -4,23 +4,17 @@ I am creating an interactive web app using HTML, CSS and Vanilla JS. The purpose
 
 # Design
 
-The UI is split into a header, a left-hand toolbar, and a main view. The main view is a pageless vertically scrolling list of cards, with each card visually bundling each step of the assessment proccess. Visually, the application should be barebones. No fancy CSS, just a simple dark aesthetic with minimal complexity and styling. For icons, use Tabler icons delivered via CDN. Icons should only be used on buttons, not scattered throughout the application.
+The UI is split into a left-hand sidebar and a main view. The main view is a pageless vertically scrolling list of cards, with each card visually bundling each step of the assessment process. Visually, the application should be barebones. No fancy CSS, just a simple dark aesthetic with minimal complexity and styling. For icons, use Tabler icons delivered via CDN. Icons should only be used on buttons, not scattered throughout the application.
 
-## Header
+## Left-hand Sidebar
 
-The header contains a stopwatch and two controls to the left (start/pause, reset) and the current patient's name to the right (drawn from the patient name input field, before this is filled just says 'New Patient').
-
-Note that the stopwatch should turn red when it passes 45 minutes.
-
-## Left-hand Toolbar
-
-This sidebar serves several functions. It is an outline of the assessment structure, with a line of text for each section which on pressed scrolls the main view to that section. It also serves as a progress tracker because the text changes from blue to grey and a tick appears next to completed sections.
+This sidebar contains a stopwatch at the top with start/pause and reset controls. The stopwatch should turn red when it passes 45 minutes. Below the timer is an outline of the assessment structure, with a line of text for each section and subsection which when pressed scrolls the main view to that section. It also serves as a progress tracker because the text changes from blue to grey and a tick appears next to completed sections.
 
 ## Main View
 
-This is where the entire assessment proccess is detailed. Content is seperated into 'cards'. Cards contain four categories of content: 'Direction', which are short written instructions. 'Verbatim', which is a block of text to read out word for word. 'Input' which is a text box or number input field. 'Search' which is a list of predefined values that can be filtered and selected from which will funnel later content.
+This is where the entire assessment process is detailed. Content is separated into 'cards'. Cards contain four categories of content: 'Direction', which are short written instructions. 'Verbatim', which is a block of text to read out word for word. 'Input' which is a text box or number input field. 'Search' which is a list of predefined values that can be filtered and selected from which will funnel later content.
 
-Note that input feilds and search lists allow for multiple descreet inputs via an 'add' button which are collated in a list of chips below the input. Items from this list can be deleted using a bin icon which appears when a chip is hovered over.
+Note that input fields and search lists allow for multiple discrete inputs via an 'add' button which are collated in a list of chips below the input. Items from this list can be deleted using a bin icon which appears when a chip is hovered over.
 
 Cards with only instructions and verbatim can be completed by simply clicking on them (they can be clicked again to uncomplete, like a checklist). Cards which contain an input or search selection will complete when their input list has at least one entry.
 
@@ -46,7 +40,7 @@ There are five core stages in a PWP assessment, each with subsections. The struc
     * Problem Statement
     * Next Steps
 
-I will seperate each card with --- and code Direction, Verbatim, Input, and Search as D, V, I, and S respectively. I have used ${} synatax where a tracked variable should be included in the text, and have included notes on branching content within {}.
+I will separate each card with --- and code Direction, Verbatim, Input, and Search as D, V, I, and S respectively. I have used ${} syntax where a tracked variable should be included in the text, and have included notes on branching content within {}.
 
 ## Introduction
 
@@ -264,7 +258,7 @@ I: Past treatments
 
 S: Medication for mental health (include a comprehensive list of psychiatric drugs here, or none)
 
-I: Attituate towards medication
+I: Attitude towards medication
 
 ---
 
@@ -370,7 +364,7 @@ D: Ask how the patient feels about this course of treatment.
 
 ## Shared Decision Making
 
-V: It's really important to explore issues which might impact your engagement with this treatment, so I'm going to ask you some questions about your capability, opportunities, and motivation regarding ${treatment}. Starting with capability, can you forsee any barriers in this regard? This could be things like concentration, eyesight and reading...
+V: It's really important to explore issues which might impact your engagement with this treatment, so I'm going to ask you some questions about your capability, opportunities, and motivation regarding ${treatment}. Starting with capability, can you foresee any barriers in this regard? This could be things like concentration, eyesight and reading...
 
 I: Capability considerations
 
@@ -424,6 +418,6 @@ D: Establish next contact
 
 # Technical Notes
 
-The current session and all its data should be stored in broswer storage to avoid loss of progress if the tab is accidentaly closed.
+The current session and all its data should be stored in browser storage to avoid loss of progress if the tab is accidentally closed.
 
-This is a dekstop first web app built using vanilla JS, HTML and CSS. There is no need for mobile support - prioritise design simplicity.
+This is a desktop first web app built using vanilla JS, HTML and CSS. There is no need for mobile support - prioritise design simplicity.
