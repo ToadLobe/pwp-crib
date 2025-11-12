@@ -174,15 +174,15 @@ const cards = [
                     const gad = state.inputs["gad7-score"]?.[0];
 
                     if (phq >= 0) {
-                        if (phq < 5) feedback += "Your score on the PHQ-9 indicates that you are experiencing sub-clinical depressive symptoms. What this means is that your score does not differ significantly from what we'd expect to see in the general population.\n\n";
-                        else if (phq < 10) feedback += "Your score on the PHQ-9 indicates that you are experiencing mild depressive symptoms. What this means is that you have felt quite depressed for several days over the past two weeks.\n\n";
+                        if (phq < 5) feedback += "Your score on the PHQ-9 indicates that you are experiencing sub-clinical depressive symptoms. What this means is that you are not feeling depressed any more frequently than the average person.\n\n";
+                        else if (phq < 10) feedback += "Your score on the PHQ-9 indicates that you are experiencing mild depressive symptoms. What this means is that you have felt depressed for several days over the past two weeks.\n\n";
                         else if (phq < 15) feedback += "Your score on the PHQ-9 indicates that you are experiencing moderate depressive symptoms. What this means is that you have felt depressed for more than half the days over the past two weeks.\n\n";
                         else feedback += "Your score on the PHQ-9 indicates that you are experiencing severe depressive symptoms. What this means is that you have felt very depressed almost every day over the past two weeks.\n\n";
                     }
 
                     if (gad >= 0) {
-                        if (gad < 5) feedback += "Your score on the GAD-7 indicates that you are experiencing sub-clinical anxiety symptoms. What this means is that your score does not differ significantly from what we'd expect to see in the general population.";
-                        else if (gad < 10) feedback += "Your score on the GAD-7 indicates that you are experiencing mild anxiety symptoms. What this means is that you have felt quite anxious for several days over the past two weeks.";
+                        if (gad < 5) feedback += "Your score on the GAD-7 indicates that you are experiencing sub-clinical anxiety symptoms. What this means is that you are not feeling anxious any more frequently than the average person.";
+                        else if (gad < 10) feedback += "Your score on the GAD-7 indicates that you are experiencing mild anxiety symptoms. What this means is that you have felt anxious for several days over the past two weeks.";
                         else if (gad < 15) feedback += "Your score on the GAD-7 indicates that you are experiencing moderate anxiety symptoms. What this means is that you have felt anxious for more than half the days over the past two weeks.";
                         else feedback += "Your score on the GAD-7 indicates that you are experiencing severe anxiety symptoms. What this means is that you have felt very anxious almost every day over the past two weeks.";
                     }
@@ -219,7 +219,9 @@ const cards = [
             { type: "verbatim", content: "Do you feel that you are currently neglecting yourself in any way?" },
             { type: "verbatim", content: "Is there anyone who depends on you for their care at the moment?" },
             { type: "verbatim", content: "Are you experiencing any difficulties meeting the needs of the people in your care?" },
-            { type: "verbatim", content: "Do you feel that you might be neglecting the needs of anyone else at all?" }
+            { type: "verbatim", content: "Do you feel that you might be neglecting the needs of anyone else at all?" },
+            { type: "verbatim", content: "If your answers to any of these questions were to change, do you know who you would speak to or where you would go?" }
+
         ]
     },
     {
@@ -227,8 +229,7 @@ const cards = [
         section: "information-gathering",
         subsection: "safety",
         items: [
-            { type: "verbatim", content: "If your answers to any of these questions were to change, do you know who you would speak to or where you would go?" },
-            { type: "direction", content: "Give the patient the safety information sheet." }
+            { type: "direction", content: "Confirm the patient's score of ${phq9q9score} on the PHQ-9 Q9 is consistent with their responses." }
         ]
     },
     {
@@ -236,7 +237,7 @@ const cards = [
         section: "information-gathering",
         subsection: "safety",
         items: [
-            { type: "direction", content: "Confirm the patient's score of ${phq9q9score} on the PHQ-9 Q9 is consistent with their responses." }
+            { type: "direction", content: "Summarise the patient's answers to the safety assessment." },
         ]
     },
     {
@@ -244,8 +245,15 @@ const cards = [
         section: "information-gathering",
         subsection: "safety",
         items: [
-            { type: "direction", content: "Summarise the patient's answers to the safety assessment." },
-            { type: "search", label: "Safety plan required?", stateKey: "safety-plan-required", options: ["yes", "no"], singleValue: true }
+            { type: "search", label: "Full safety plan required?", stateKey: "safety-plan-required", options: ["yes", "no"], singleValue: true }
+        ]
+    },
+    {
+        id: "safety-5",
+        section: "information-gathering",
+        subsection: "safety",
+        items: [
+            { type: "direction", content: "Give the patient the safety information sheet." }
         ]
     },
     {
@@ -276,6 +284,24 @@ const cards = [
         ]
     },
     {
+        id: "context-identity",
+        section: "information-gathering",
+        subsection: "context",
+        items: [
+            { type: "verbatim", content: "Are there any aspects of your identity that might be relevant to your treatment? This could include things like neurodivergence, ethnicity, faith, sexuality..." },
+            { type: "input", inputType: "text", label: "Identity aspects", stateKey: "identity-aspects" }
+        ]
+    },
+    {
+        id: "context-factors",
+        section: "information-gathering",
+        subsection: "context",
+        items: [
+            { type: "input", inputType: "text", label: "Predisposing factors", stateKey: "predisposing-factors" },
+            { type: "input", inputType: "text", label: "Perpetuating factors", stateKey: "perpetuating-factors" }
+        ]
+    },
+    {
         id: "context-2",
         section: "information-gathering",
         subsection: "context",
@@ -300,6 +326,15 @@ const cards = [
         items: [
             { type: "search", label: "Medication for mental health", stateKey: "mh-medication", options: medications },
             { type: "input", inputType: "text", label: "Attitude towards medication", stateKey: "medication-attitude" }
+        ]
+    },
+    {
+        id: "context-4b",
+        section: "information-gathering",
+        subsection: "context",
+        items: [
+            { type: "input", inputType: "text", label: "Use of OTC medication", stateKey: "otc-medication" },
+            { type: "input", inputType: "text", label: "Use of herbal remedies", stateKey: "herbal-remedies" }
         ]
     },
     {
@@ -363,49 +398,42 @@ const cards = [
                     const dx = state.inputs["diagnosis"]?.[0];
                     const info = {
                         "Depression": {
-                            norm: "Very common. 1 in 20 suffer from depression.",
-                            desc: "More than just feeling sad. It's a persistent low mood, hopelessness, and a loss of interest or pleasure in nearly all activities, lasting at least two weeks. It often affects sleep, appetite, and energy."
+                            verbatim: "Depression is very common—about 1 in 20 people experience it at some point. It's important to understand that depression is more than just feeling sad or having a bad day. What we're talking about is a persistent low mood that lasts at least two weeks, where you might feel hopeless and lose interest or pleasure in things you normally enjoy. It can affect everything—your sleep might be disrupted, you might have changes in appetite, and you often feel exhausted even when you haven't done much. You might find it hard to concentrate, feel guilty or worthless, or have thoughts about harming yourself. These feelings are very real and very understandable given what you're experiencing. The good news is that depression is one of the most treatable mental health conditions. With the right support and treatment, people recover well and go on to live fulfilling lives."
                         },
                         "GAD": {
-                            norm: "Common. Affects about 3.1% of U.S. adults each year. It often develops gradually.",
-                            desc: "Excessive, uncontrollable worry about many different things (money, health, work) that is out of proportion to the situation. It's often paired with physical symptoms like muscle tension, restlessness, and fatigue."
+                            verbatim: "Generalised Anxiety Disorder, or GAD, affects about 3 in every 100 adults, and it often develops gradually, so people sometimes don't realise when it's started. With GAD, you experience excessive worry that you find difficult to control—it can be about anything really: money, your health, work, your relationships, or things that haven't even happened yet. The key thing is that this worry feels out of proportion to what's actually happening. Along with the worry, you'll often notice physical symptoms like muscle tension, a feeling of restlessness, difficulty sleeping, fatigue, and trouble concentrating. The worry can feel like it's always there, even on days when there's nothing particular to worry about. What's important to know is that this constant worry is your mind trying to protect you, but it's become stuck in overdrive. The encouraging news is that GAD is highly treatable. With the right therapeutic approaches, you can learn to manage your worry and regain a sense of calm and control in your life."
                         },
                         "Panic Disorder": {
-                            norm: "Affects about 2.7% of U.S. adults annually.",
-                            desc: "Involves recurrent, sudden, and intense episodes of fear (panic attacks) that peak within minutes. A key feature is the intense fear of having another attack, leading to avoidance."
+                            verbatim: "Panic Disorder affects about 2.7% of adults at some point in their life. The hallmark of panic disorder is recurrent panic attacks—sudden, intense episodes of fear that come on quickly and peak within a few minutes. During a panic attack, you might experience a racing heart, sweating, shortness of breath, chest pain, dizziness, or a sense of being detached from reality. The really difficult part is that after one or two of these attacks, many people develop a fear of having another attack. This fear can become so intense that you start to avoid situations where you think an attack might happen, or where you'd feel trapped if one did. This avoidance often makes the problem worse over time. The important thing to understand is that panic attacks, while terrifying, are not dangerous—your body is having a false alarm. The good news is that panic disorder is very treatable. With the right support, you can learn to understand your panic attacks and break the cycle of fear, which allows them to become less frequent and less intense."
                         },
                         "Agoraphobia": {
-                            norm: "Affects about 1.7% of adolescents and adults annually.",
-                            desc: "An intense fear of situations where escape might be difficult or help unavailable if panic strikes. This leads to avoiding places like public transport, crowds, open spaces, or enclosed shops."
+                            verbatim: "Agoraphobia affects about 1.7% of adolescents and adults. The word literally means 'fear of the marketplace,' but it's really an intense fear of situations where you feel trapped or where escape might be difficult, or where help might not be available if something goes wrong. Without panic attacks, agoraphobia develops as a fear response to places or situations themselves. People with agoraphobia often avoid public transport, crowded places, queues, open spaces like bridges or car parks, or enclosed spaces like shops. In severe cases, it can lead to avoiding leaving home altogether. It's a very real and distressing condition, but the encouraging news is that it's also very treatable. With effective treatment, people can gradually face these situations again and reclaim their independence and freedom."
+                        },
+                        "Agoraphobia with Panic Disorder": {
+                            verbatim: "When Agoraphobia develops together with Panic Disorder, it creates a particularly distressing cycle. You experience recurrent panic attacks—sudden, intense episodes of fear that peak within minutes, with symptoms like racing heart, sweating, shortness of breath, or chest pain. The fear of having another attack becomes so powerful that you start avoiding situations where you believe an attack might happen, or where escape would be difficult or help unavailable. This might mean avoiding public transport, crowded places, queues, open spaces, or enclosed spaces. Over time, as you avoid more and more situations, your world can become increasingly smaller, and the anxiety becomes even more entrenched. What makes this condition particularly difficult is that the fear of the panic attack itself fuels the avoidance, which reinforces the belief that these situations are dangerous. However, this combination is highly treatable with the right support."
                         },
                         "Phobia": {
-                            norm: "Very common. Affects 7% to 9% of the population.",
-                            desc: "An intense, irrational fear of a specific object or situation (e.g., spiders, heights, needles, flying). The fear is immediate and overwhelming, leading to active avoidance."
+                            verbatim: "Specific phobias are very common—they affect between 7 and 9% of the population at some point. A phobia is an intense, irrational fear of a specific object or situation—it could be spiders, heights, needles, flying, water, or something else entirely. The key feature is that when you encounter or even think about the thing you're afraid of, the fear is immediate, overwhelming, and out of proportion to any real danger. Your body goes into a fight-or-flight response: your heart races, you sweat, and you feel intense panic. Because the fear is so strong, you'll do whatever you can to avoid the thing you're afraid of. Avoidance makes sense in the short term because it gets rid of the anxiety, but over time it actually reinforces the fear. The good news is that specific phobias are among the most treatable of all mental health conditions. With the right therapeutic approach, most people can overcome their phobia and face the thing they were afraid of."
                         },
                         "OCD": {
-                            norm: "Millions of people in this country experience OCD at some point in their life.",
-                            desc: "A cycle of obsessions (unwanted, intrusive thoughts) and compulsions (repetitive behaviours to reduce anxiety)"
+                            verbatim: "Obsessive-Compulsive Disorder, or OCD, affects millions of people at some point in their life. OCD involves a cycle of two main components: obsessions and compulsions. Obsessions are unwanted, intrusive thoughts, images, or urges that pop into your mind repeatedly and cause significant anxiety or distress. They're often about themes like contamination, harm coming to yourself or others, needing things to be 'just right,' or thoughts that don't fit with your values. Compulsions are repetitive behaviours or mental acts that you feel driven to perform to try to reduce the anxiety caused by the obsession—things like checking, cleaning, arranging, counting, or repeating. The problem is that while compulsions provide temporary relief, they actually feed the cycle: they tell your brain that the threat is real, so the obsessions come back even stronger. The important thing to understand is that having these thoughts doesn't mean there's anything wrong with you—intrusive thoughts are actually very common. The good news is that OCD is very treatable. With the right therapy, you can learn to break the cycle and reduce both the obsessions and compulsions, allowing you to reclaim your time and mental peace."
                         },
                         "PTSD": {
-                            norm: "1 in 25 adults have experienced PTSD in the past year. Not everyone who experiences trauma develops it.",
-                            desc: "Can develop after experiencing or witnessing a traumatic event. Symptoms include flashbacks, nightmares, avoiding reminders of the event, negative feelings, and being easily startled or 'on edge.'"
+                            verbatim: "Post-Traumatic Stress Disorder, or PTSD, develops after experiencing or witnessing a traumatic event—something that was life-threatening or involved serious injury or threat to your physical integrity. About 1 in 25 adults has experienced PTSD in the past year, and importantly, not everyone who experiences trauma develops it. With PTSD, memories of the trauma feel as though they're happening again in the present—you might have flashbacks where you're right back in the moment, or nightmares that jolt you awake. You might feel a constant need to be on guard, find yourself easily startled, or feel like you're in danger even when you're safe. Many people avoid anything that reminds them of the trauma, and they often experience negative feelings like guilt, shame, anger, or emotional numbness. These symptoms cause significant distress and interfere with daily life. What's important to know is that PTSD is a normal response to an abnormal event—your mind and body are trying to protect you. The encouraging news is that PTSD is treatable. With the right therapy, you can process the trauma and move forward, allowing you to feel safer and regain control of your life."
                         },
                         "Social Phobia": {
-                            norm: "Very common. Affects an estimated 7% of U.S. adults in a given year.",
-                            desc: "An intense, persistent fear of being watched and judged by others in social situations. The person fears they will act in an embarrassing or humiliating way, leading to avoidance of social events."
+                            verbatim: "Social Phobia, also called Social Anxiety Disorder, is very common—it affects an estimated 7% of adults. It's an intense, persistent fear of social situations where you might be watched or judged by others. The core fear is that you'll act in a way that will be embarrassing, humiliating, or that others will think negatively of you. These situations might include things like public speaking, eating or drinking in front of others, socialising at parties, or even just making eye contact. When you're in these situations, you experience significant anxiety—your heart races, you sweat, you might feel shaky or your mind goes blank. Because the anxiety is so strong, you'll often go to great lengths to avoid these situations altogether, which can become very limiting and affect your relationships, work, and quality of life. What's important to know is that the fear you experience is real, but it often doesn't match reality—most people are far less judgmental than you believe. The good news is that social anxiety is very treatable. With the right support, you can gradually face social situations and discover that you're able to cope, which allows your anxiety to decrease and your confidence to grow."
                         },
                         "Hypochondriasis": {
-                            norm: "Affects 1.3% to 10% of people in the general population.",
-                            desc: "A persistent, excessive worry about having or developing a serious, undiagnosed illness. Normal bodily sensations are often misinterpreted as signs of a severe disease, even after medical reassurance."
+                            verbatim: "Health Anxiety, formerly called Hypochondriasis, affects between 1.3 and 10% of people in the general population. The core feature is a persistent, excessive worry about having or developing a serious, undiagnosed illness—like cancer, heart disease, or a rare condition. People with health anxiety often misinterpret normal bodily sensations: you might notice a slight ache and become convinced it's a tumour, or feel your heart skip a beat and panic that it means you have a heart problem. You might repeatedly check your body, research your symptoms online, or seek constant reassurance from doctors or loved ones, but the reassurance only provides temporary relief before the worry returns. This cycle of worry, checking, and seeking reassurance can become very time-consuming and distressing, even when medical tests show there's nothing wrong. What's important to understand is that your worry comes from caring about your health—that's actually a good thing. The good news is that health anxiety is very treatable. With the right support, you can break the cycle of worry and checking, learn to tolerate uncertainty, and regain peace of mind about your health."
                         },
                         "BDD": {
-                            norm: "Affects about 2.4% of U.S. adults (roughly as common as OCD).",
-                            desc: "A preoccupation with one or more perceived flaws in physical appearance that are minor or not observable to others. This causes significant distress and repetitive behaviours (e.g., mirror checking, grooming)."
+                            verbatim: "Body Dysmorphic Disorder, or BDD, affects about 2.4% of adults—roughly as common as OCD. It's characterised by a preoccupation with one or more perceived flaws in your physical appearance that are either minor or not observable to other people. Despite the flaw being small or invisible to others, you experience significant distress about it and spend a lot of time thinking about it. This often leads to repetitive behaviours aimed at checking or fixing the perceived flaw—you might spend hours mirror checking, comparing your appearance to others, grooming excessively, or seeking reassurance about how you look. You might avoid social situations, wear certain clothes to hide the flaw, or even have cosmetic procedures in an attempt to fix it. These behaviours provide only temporary relief, and the preoccupation often intensifies over time. What's important to understand is that BDD is not vanity or shallow—it's a real psychological condition where the way you perceive your appearance doesn't match how others see you. The good news is that BDD is treatable. With the right therapy, you can change how you think about your appearance, reduce the compulsive behaviours, and improve your quality of life."
                         }
                     };
 
-                    const data = info[dx] || { norm: "", desc: "" };
-                    return `Give the informal diagnosis. ${data.norm} ${data.desc} Check patient understanding.`;
+                    const data = info[dx] || { verbatim: "" };
+                    return `Have you heard of ${dx} before? ${data.verbatim} (Once you've finished reading this, check the patient's understanding by asking them to reflect back what they've heard.)`;
                 }
             }
         ]
@@ -444,16 +472,16 @@ const cards = [
                     const gad = state.inputs["gad7-score"]?.[0];
 
                     const guidance = {
-                        "Depression": phq >= 15 ? "HiCBT for severe PHQ-9" : "LiCBT for below severe",
-                        "GAD": gad >= 15 ? "HiCBT for severe GAD-7" : "LiCBT for below severe",
+                        "Depression": phq >= 15 ? `HiCBT is recommended for severe cases (PHQ-9 Score:${phq})` : `LiCBT is recommended for non-severe cases (PHQ-9 Score:${phq})`,
+                        "GAD": gad >= 15 ? `HiCBT is recommended for severe cases (PHQ-9 Score:${gad})` : `LiCBT is recommended for non-severe cases (PHQ-9 Score:${gad})`,
                         "Panic Disorder": "Depends on impact severity",
                         "Agoraphobia": "Depends on impact severity",
-                        "Phobia": "LiCBT (except Trypanophobia/Emetophobia use HiCBT)",
-                        "OCD": "Depends on symptom severity",
-                        "PTSD": "Always HiCBT",
-                        "Social Phobia": "Always HiCBT",
-                        "Hypochondriasis": "Always HiCBT",
-                        "BDD": "Always HiCBT"
+                        "Phobia": "LiCBT (except for Trypanophobia/Emetophobia use HiCBT)",
+                        "OCD": "Depends on symptom severity and nature of compulsions",
+                        "PTSD": `Always HiCBT for ${dx}`,
+                        "Social Phobia": `Always HiCBT for ${dx}`,
+                        "Hypochondriasis": `Always HiCBT for ${dx}`,
+                        "BDD": `Always HiCBT for ${dx}`
                     };
 
                     return `Treatment decision guidance: ${guidance[dx] || "Consider impact severity"}`;

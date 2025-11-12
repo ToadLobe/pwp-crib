@@ -260,6 +260,18 @@ I: Physical long-term health conditions
 
 ---
 
+V: I'd like to ask you about aspects of your identity that might be relevant to your presentation. This could include things like neurodivergence, ethnicity, faith, sexuality, or gender - whichever feels important to you.
+
+I: Identity aspects
+
+---
+
+I: Predisposing factors
+
+I: Perpetuating factors
+
+---
+
 I: Onset
 
 I: Motivation for seeking help now
@@ -275,6 +287,12 @@ I: Past treatments
 S: Medication for mental health (include a comprehensive list of psychiatric drugs here, or none)
 
 I: Attitude towards medication
+
+---
+
+I: Use of OTC medication
+
+I: Use of herbal remedies
 
 ---
 

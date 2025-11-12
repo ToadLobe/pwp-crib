@@ -55,8 +55,41 @@ article.clickable {
     cursor: pointer;
 }
 
+article {
+    transition: border-left-color 0.5s ease, padding-left 0.5s ease;
+}
+
 article.completed {
-    opacity: 0.6;
+    border-left: 4px solid var(--pico-form-element-valid-border-color);
+    padding-left: calc(1rem - 4px);
+    position: relative;
+}
+
+article.completed::before {
+    content: '✓';
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    color: var(--pico-form-element-valid-border-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+    background-color: var(--pico-card-background-color);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 article.hidden {
