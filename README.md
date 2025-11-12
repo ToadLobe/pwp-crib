@@ -32,7 +32,7 @@ This is where the entire assessment process is detailed. Content is separated in
 
 **Cards with only directions and verbatim** can be completed by clicking on them (they can be clicked again to uncomplete, like a checklist).
 
-**Cards with input or search fields** complete automatically when they contain at least one entry. For single-value fields, the entry must be saved with the Save button.
+**Cards with input or search fields** complete automatically when ALL input and search fields contain at least one entry. For single-value fields, the entry must be saved with the Save button.
 
 # Structure
 
@@ -333,7 +333,7 @@ D: Give the informal diagnosis, including explanation of informality, normalisin
 
 ### CBT
 
-V: Many of the treatments we offer at NHS TT are based on CBT, which stands for congitive behavioural therapy. Can I ask if you've heard of CBT before?
+V: Many of the treatments we offer at NHS TT are based on CBT, which stands for cognitive behavioural therapy. Can I ask if you've heard of CBT before?
 
 D: Explain CBT using the patient's symptoms as examples.
 
@@ -398,19 +398,19 @@ D: Explore capability surrounding modality and technology.
 
 ---
 
-D: Give the patient a booklet about ${treatment} for ${diagnosis}. Highlight the relevance of specific pages. This could be the explanation of CBT, testemonials, or more information about their diagnosis.
+D: Give the patient a booklet about ${treatment} for ${diagnosis}. Highlight the relevance of specific pages. This could be the explanation of CBT, testimonials, or more information about their diagnosis.
 
 ---
 
 D: Agree a plan for treatment, taking into account COM-B and modality preferences, and ensure the patient reflects it back.
 
-V: Just to reiterate because it's really important, engaging with the materials outside of sessions is really important for the effectiveness of the treatment. So If you can find the time to read those pages of the booklet, I reccomend you do.
+V: Just to reiterate because it's really important, engaging with the materials outside of sessions is really important for the effectiveness of the treatment. So if you can find the time to read those pages of the booklet, I recommend you do.
 
 ---
 
 ## Ending
 
-V: What I’d like to do now is to draw all the main points we've discussed into one single summary. We call this a 'problem statement', and its very useful because it gives us a baseline or starting point for treatment. We can look back at it later to help us track your progress, see which parts are getting better, and identify if we need to make any adjustments to our plan. Does that make sense?
+V: What I'd like to do now is to draw all the main points we've discussed into one single summary. We call this a 'problem statement', and it's very useful because it gives us a baseline or starting point for treatment. We can look back at it later to help us track your progress, see which parts are getting better, and identify if we need to make any adjustments to our plan. Does that make sense?
 
 V: You can write the statement yourself, or I can write it for you. Which would you prefer?
 
@@ -420,7 +420,7 @@ V: You can write the statement yourself, or I can write it for you. Which would 
 
 I: Problem statement
 
-D: Read it back to the patient and confirm it fits their expereince.
+D: Read it back to the patient and confirm it fits their experience.
 
 ---
 

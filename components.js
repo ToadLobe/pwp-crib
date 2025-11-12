@@ -101,13 +101,13 @@ function renderCard(cardDef, state) {
     let isCompleted = false;
 
     if (hasInputs) {
-        // Auto-complete if any input/search field has at least one entry
-        isCompleted = cardDef.items.some(item => {
+        // Auto-complete only if ALL input/search fields have at least one entry
+        isCompleted = cardDef.items.every(item => {
             if (item.type === 'input' || item.type === 'search') {
                 const values = state.inputs[item.stateKey] || [];
                 return values.length > 0;
             }
-            return false;
+            return true;
         });
 
         // Update state to reflect auto-completion
@@ -192,10 +192,10 @@ function getItemContent(item, state) {
  * @returns {HTMLElement} Direction element
  */
 function renderDirection(item, state) {
-    const div = document.createElement('div');
-    div.className = 'direction';
-    div.textContent = getItemContent(item, state);
-    return div;
+    const p = document.createElement('p');
+    p.className = 'direction';
+    p.textContent = getItemContent(item, state);
+    return p;
 }
 
 /**
@@ -205,11 +205,10 @@ function renderDirection(item, state) {
  * @returns {HTMLElement} Verbatim element
  */
 function renderVerbatim(item, state) {
-    const div = document.createElement('div');
-    div.className = 'verbatim';
-    div.style.whiteSpace = 'pre-line';
-    div.textContent = getItemContent(item, state);
-    return div;
+    const p = document.createElement('p');
+    p.className = 'verbatim';
+    p.textContent = getItemContent(item, state);
+    return p;
 }
 
 /**
@@ -220,12 +219,6 @@ function renderVerbatim(item, state) {
  */
 function renderInput(item, state) {
     const group = document.createElement('fieldset');
-
-    // Label
-    const label = document.createElement('label');
-    label.textContent = item.label;
-    label.htmlFor = `input-${item.stateKey}`;
-    group.appendChild(label);
 
     // Input row (input + button) with role="group"
     const inputRow = document.createElement('div');
@@ -241,7 +234,7 @@ function renderInput(item, state) {
         input.type = item.inputType || 'text';
     }
     input.id = `input-${item.stateKey}`;
-    input.placeholder = item.inputType === 'number' ? '0' : 'Type here...';
+    input.placeholder = item.label;
 
     // For single value fields, populate with existing value
     if (item.singleValue && state.inputs[item.stateKey] && state.inputs[item.stateKey].length > 0) {
@@ -334,11 +327,6 @@ function renderDrugInfo(selectedMeds) {
 function renderSearch(item, state) {
     const group = document.createElement('fieldset');
 
-    // Label
-    const label = document.createElement('label');
-    label.textContent = item.label;
-    group.appendChild(label);
-
     // Search input container
     const searchContainer = document.createElement('div');
     searchContainer.className = 'search-container';
@@ -346,7 +334,7 @@ function renderSearch(item, state) {
     // Search input
     const input = document.createElement('input');
     input.type = 'search';
-    input.placeholder = 'Type to search...';
+    input.placeholder = item.label;
     input.autocomplete = 'off';
 
     // Dropdown

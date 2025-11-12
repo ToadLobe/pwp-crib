@@ -1,12 +1,9 @@
-/* ===========================
-   Layout System (CSS Grid)
-   =========================== */
-
 :root {
-    --sidebar-width: 280px;
+    --sidebar-width: 20vw;
 }
 
-html, body {
+html,
+body {
     height: 100%;
 }
 
@@ -21,9 +18,7 @@ body {
 
 #app-sidebar {
     border-right: 1px solid var(--pico-muted-border-color);
-    overflow-y: auto;
     padding: 1rem;
-    background-color: var(--pico-background-color);
 }
 
 /* Timer in Sidebar */
@@ -41,24 +36,6 @@ body {
     color: var(--pico-del-color);
 }
 
-#sidebar-nav a.completed {
-    color: var(--pico-muted-color);
-}
-
-#sidebar-nav .checkmark {
-    font-size: 1rem;
-    color: var(--pico-muted-color);
-}
-
-#sidebar-nav a.sidebar-subitem {
-    padding-left: 1.5rem;
-    font-size: 0.85rem;
-}
-
-/* ===========================
-   Main Scrollable Area
-   =========================== */
-
 #app-main {
     overflow-y: auto;
     padding: 1.5rem;
@@ -74,10 +51,6 @@ body {
     max-width: 800px;
 }
 
-/* ===========================
-   Article (Card) Behavior Styles
-   =========================== */
-
 article.clickable {
     cursor: pointer;
 }
@@ -90,23 +63,11 @@ article.hidden {
     display: none;
 }
 
-/* ===========================
-   Content Styles
-   =========================== */
-
-.direction {
+.verbatim {
     color: var(--pico-muted-color);
     font-style: italic;
-    margin-bottom: 1rem;
+    white-space: pre-line;
 }
-
-.verbatim {
-    margin-bottom: 1rem;
-}
-
-/* ===========================
-   Input & Search Components
-   =========================== */
 
 .search-container {
     position: relative;
@@ -149,16 +110,12 @@ article.hidden {
     background-color: transparent;
 }
 
-/* ===========================
-   Chips
-   =========================== */
-
 .chips-container,
 .chip-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .chip {
@@ -170,10 +127,6 @@ article.hidden {
     border-radius: var(--pico-border-radius);
     padding: 0.4rem 0.75rem;
     font-size: 0.9rem;
-}
-
-.chip:hover {
-    border-color: var(--pico-primary);
 }
 
 .chip-delete {
@@ -196,12 +149,8 @@ article.hidden {
     color: var(--pico-del-color);
 }
 
-/* ===========================
-   Drug Information Display
-   =========================== */
-
 .drug-info-container {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -213,26 +162,6 @@ article.hidden {
     border-radius: var(--pico-border-radius);
     padding: 0.75rem;
 }
-
-/* ===========================
-   Fieldset & Form Styling
-   =========================== */
-
-fieldset {
-    border: none;
-    padding: 0;
-    margin: 0;
-}
-
-fieldset label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-}
-
-/* ===========================
-   Utility Classes
-   =========================== */
 
 .hidden {
     display: none !important;

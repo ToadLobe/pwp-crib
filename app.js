@@ -57,8 +57,8 @@ function renderSidebar() {
                 : false;
 
             if (isCompleted) {
-                link.classList.add('completed');
-                link.innerHTML = `<span class="checkmark">✓</span><span>${section.name}</span>`;
+                link.classList.add('secondary');
+                link.innerHTML = `<span class="checkmark">✓ </span><span>${section.name}</span>`;
             } else {
                 link.textContent = section.name;
             }
@@ -81,8 +81,8 @@ function renderSidebar() {
                         : false;
 
                     if (subIsCompleted) {
-                        subLink.classList.add('completed');
-                        subLink.innerHTML = `<span class="checkmark">✓</span><span>${subsection.name}</span>`;
+                        subLink.classList.add('secondary');
+                        subLink.innerHTML = `<span class="checkmark">✓ </span><span>${subsection.name}</span>`;
                     } else {
                         subLink.textContent = subsection.name;
                     }
@@ -150,10 +150,10 @@ function updateTimerToggleButton() {
 
     if (typeof state !== 'undefined' && state.isRunning !== undefined) {
         if (state.isRunning) {
-            icon.className = 'ti ti-player-pause';
+            icon.className = 'ti ti-player-pause-filled';
             timerToggle.setAttribute('aria-label', 'Pause timer');
         } else {
-            icon.className = 'ti ti-player-play';
+            icon.className = 'ti ti-player-play-filled';
             timerToggle.setAttribute('aria-label', 'Start timer');
         }
     }
@@ -250,17 +250,17 @@ function handleMainViewClick(event) {
         return;
     }
 
-    // Handle add button clicks
-    const addButton = event.target.closest('button[data-card-id]');
-    if (addButton) {
-        handleAddButtonClick(addButton);
-        return;
-    }
-
-    // Handle chip delete clicks
+    // Handle chip delete clicks (must come before add button handler to take priority)
     const chipDelete = event.target.closest('.chip-delete');
     if (chipDelete) {
         handleChipDelete(chipDelete);
+        return;
+    }
+
+    // Handle add button clicks
+    const addButton = event.target.closest('button[data-card-id]:not(.chip-delete)');
+    if (addButton) {
+        handleAddButtonClick(addButton);
         return;
     }
 
