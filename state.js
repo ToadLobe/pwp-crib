@@ -352,7 +352,8 @@ function setState(newState) {
     saveState();
 }
 
-// Export state for debugging in console
+// Export functions for debugging in console and cross-module access
 if (typeof window !== 'undefined') {
     window.getState = getState;
+    window.getVariable = getVariable;
 }
