@@ -4,7 +4,7 @@ I am creating an interactive web app using HTML, CSS and Vanilla JS. The purpose
 
 # Design
 
-The UI is split into a left-hand sidebar and a main view. The main view is a pageless vertically scrolling list of cards, with each card visually bundling each step of the assessment process. Visually, the application should be barebones. No fancy CSS, just a simple dark aesthetic with minimal complexity and styling. For icons, use Tabler icons delivered via CDN. Icons should only be used on buttons, not scattered throughout the application.
+The UI is split into a left-hand sidebar and a main view. The main view is a pageless vertically scrolling list of cards, with each card visually bundling each step of the assessment process. The application uses the Pico CSS framework for styling, providing a clean dark aesthetic with minimal complexity. For icons, use Tabler icons delivered via CDN. Icons should only be used on buttons, not scattered throughout the application.
 
 ## Left-hand Sidebar
 
@@ -166,17 +166,9 @@ I: GAD-7 score
 
 ---
 
-{The content of this card varies based on the value of `phqScore` and `gadScore`. The threshold scores for each battery are common knowledge.}
+D: Review the patient's PHQ-9 and GAD-7 scores with them and check these results reflect their experience.
 
-Verbatim for sub clinical scores: Your score on the {phq/gad} indicates that you are experiencing sub-clinical {depressive/anxiety} symptoms. What this means is that your score does not differ significantly from what we’d expect to see in the general population.
-
-Verbatim for mild scores: Your score on the {phq/gad} indicates that you are experiencing mild {depressive/anxiety} symptoms. What this means is that you have felt quite {depressed/anxious} for several days over the past two weeks.
-
-Verbatim for moderate scores: Your score on the {phq/gad} indicates that you are experiencing moderate {depressive/anxiety} symptoms. What this means is that you have felt {depressed/anxious} for more than half the days over the past two weeks.
-
-Verbatim for severe scores: Your score on the {phq/gad} indicates that you are experiencing severe {depressive/anxiety} symptoms. What this means is that you have felt very {depressed/anxious} almost every day over the past two weeks.
-
-D: Check these results reflect the patient's experience.
+**Note**: Future enhancement planned - Conditional verbatim feedback based on score severity (sub-clinical, mild, moderate, severe) is not yet implemented.
 
 ---
 
@@ -222,11 +214,9 @@ V: Do you feel that you might be neglecting the needs of anyone else at all?
 
 V: If your answers to any of these questions were to change, do you know who you would speak to or where you would go?
 
-D: Give the patient the safety information sheet.
-
 ---
 
-D: Confirm the patient's score of ${phq9q9score} on the PHQ-9 Q9 is consistent with their responses.
+D: Confirm the patient's score of ${phq-9-q9} on the PHQ-9 Q9 is consistent with their responses.
 
 ---
 
@@ -250,6 +240,8 @@ I: Disposal of means
 
 ---
 
+D: Give the patient the safety information sheet.
+
 ### Context
 
 V: Now I'd like to ask you some broader questions to get some more context.
@@ -260,7 +252,7 @@ I: Physical long-term health conditions
 
 ---
 
-V: I'd like to ask you about aspects of your identity that might be relevant to your presentation. This could include things like neurodivergence, ethnicity, faith, sexuality, or gender - whichever feels important to you.
+V: Are there any aspects of your identity that might be relevant to your treatment? This could include things like neurodivergence, ethnicity, faith, sexuality...
 
 I: Identity aspects
 
@@ -304,7 +296,7 @@ I: Expectations
 
 D: Ask about substance use, and specifically if it has changed.
 
-I: Caffiene consumption
+I: Caffeine consumption
 
 I: Alcohol consumption
 
@@ -367,7 +359,7 @@ D: Check patient understanding again.
 
 ### Treatment Options
 
-{A decision should be made by the user regarding which treatment, LiCBT or HiCBT is more suitable given the `diagnosis`. Present the relevant row of this table to the user.}
+The following table serves as a clinical reference guide for determining which treatment (LiCBT or HiCBT) is more suitable based on the patient's diagnosis and severity indicators. Use this to inform your treatment recommendation:
 
 | **Diagnosis** | LiCBT | HiCBT |
 | --- | --- | --- |
@@ -386,11 +378,9 @@ S: Treatment (LiCBT, HiCBT)
 
 ---
 
-{The content of this card varies based on the value of `treatment`.}
+D: Explain the recommended treatment to the patient based on the treatment selected.
 
-V for LiCBT: I think the treatment you would find most helpful is something called guided self-help, which is a form of CBT. It's a great starting point because it's very flexible and puts you in control. We'd use resources we know are effective, like worksheets or sometimes an online programme, that explains the links between your thoughts, feelings, and behaviours. My role would be to act as your guide, checking in with you regularly in brief 35 minutes sessions to offer support, help you overcome any obstacles, and make sense of the new techniques you're learning. Lasts 4-6 sessions. It’s a way to learn powerful skills without the commitment of longer, more formal therapy sessions straight away, and it tends to be very effective for people in your position.
-
-V for HiCBT: I think the treatment you would find most helpful is something called High-Intensity Cognitive Behavioural Therapy, or CBT. Because you've described your symptoms as being particularly severe and having a big impact on your life, this approach would give you more 1-on-1 time and allow you to dive deeper into what's going on. You would meet regularly, usually weekly, with a CBT therapist for 50-minute sessions. Together, you'd be able to explore the root of these difficulties in more detail and develop a very personalised plan to tackle them more deeply, which tends to be very effective for people in your position.
+**Note**: Future enhancement planned - Treatment-specific verbatim scripts for LiCBT and HiCBT explanations are not yet implemented. Currently, the treatment selection is made, but detailed conditional explanations are not displayed automatically.
 
 D: Ask how the patient feels about this course of treatment.
 
@@ -434,7 +424,7 @@ V: You can write the statement yourself, or I can write it for you. Which would 
 
 ---
 
-{Embed the patient's readonly answers to questions in the problem, symptoms, impacts and goals sections here for quick reference}
+D: The problem statement summary includes the patient's responses to key questions for quick reference (Problem, Symptoms, Impacts, and Goals).
 
 I: Problem statement
 
