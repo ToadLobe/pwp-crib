@@ -534,13 +534,12 @@ function interpolateContent(text, state) {
         // Try getVariable first (for special variables like 'name')
         if (typeof getVariable === 'function') {
             const value = getVariable(varName);
-            if (value) return value;
+            if (value ?? false) return value;
         }
 
         // Try direct state.inputs lookup with hyphenated key
-        if (state.inputs[varName] && state.inputs[varName][0]) {
-            return state.inputs[varName][0];
-        }
+        const stateValue = state.inputs[varName]?.[0];
+        if (stateValue ?? false) return stateValue;
 
         // Return original placeholder if not found
         return match;
