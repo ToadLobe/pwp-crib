@@ -229,7 +229,7 @@ const cards = [
         section: "information-gathering",
         subsection: "safety",
         items: [
-            { type: "direction", content: "Confirm the patient's score of ${phq9q9score} on the PHQ-9 Q9 is consistent with their responses." }
+            { type: "direction", content: "Confirm the patient's score of ${phq9q9score} on the PHQ-9 Q9 is consistent with their responses (the question which asks about thoughts of being better off dead or hurting yourself)." }
         ]
     },
     {
@@ -568,7 +568,36 @@ const cards = [
         items: [
             {
                 type: "direction",
-                content: "Summary for reference - Problem: ${core-problem}, Symptoms: ${sensations}, ${behaviours}, ${thoughts}, Impacts: ${impact-work}, ${impact-home}, Goals: ${goals}"
+                content: (state) => {
+                    const getSummaryValue = (key) => {
+                        const values = state.inputs[key] || [];
+                        return Array.isArray(values) && values.length > 0 ? values.join(', ') : '';
+                    };
+
+                    const problem = getSummaryValue('core-problem');
+                    const sensations = getSummaryValue('sensations');
+                    const behaviours = getSummaryValue('behaviours');
+                    const thoughts = getSummaryValue('thoughts');
+                    const triggers = getSummaryValue('triggers');
+                    const impactWork = getSummaryValue('impact-work');
+                    const impactHome = getSummaryValue('impact-home');
+                    const impactHobbies = getSummaryValue('impact-hobbies');
+                    const impactSocial = getSummaryValue('impact-social');
+                    const impactRelationships = getSummaryValue('impact-relationships');
+                    const goals = getSummaryValue('goals');
+
+                    let summary = `Summary for reference:\n\nProblem: ${problem}`;
+                    if (triggers) summary += `\n\nTriggers: ${triggers}`;
+                    if (sensations || behaviours || thoughts) {
+                        summary += `\n\nSymptoms:\n  - Sensations: ${sensations || 'none recorded'}\n  - Behaviours: ${behaviours || 'none recorded'}\n  - Thoughts: ${thoughts || 'none recorded'}`;
+                    }
+                    if (impactWork || impactHome || impactHobbies || impactSocial || impactRelationships) {
+                        summary += `\n\nImpacts:\n  - Work: ${impactWork || 'none recorded'}\n  - Home: ${impactHome || 'none recorded'}\n  - Hobbies: ${impactHobbies || 'none recorded'}\n  - Social: ${impactSocial || 'none recorded'}\n  - Relationships: ${impactRelationships || 'none recorded'}`;
+                    }
+                    if (goals) summary += `\n\nGoals: ${goals}`;
+
+                    return summary;
+                }
             },
             { type: "input", inputType: "text", label: "Problem statement", stateKey: "problem-statement", multiline: true, singleValue: true },
             { type: "direction", content: "Read it back to the patient and confirm it fits their experience." }
