@@ -362,9 +362,12 @@ function handleSearchInput(input) {
  */
 function handleInputFocus(event) {
     if (event.target.type === 'search') {
-        const dropdown = event.target.closest('.search-container').querySelector('.search-dropdown');
-        if (dropdown) {
-            dropdown.classList.add('active');
+        const searchContainer = event.target.closest('.search-container');
+        if (searchContainer) {
+            const dropdown = searchContainer.querySelector('.search-dropdown');
+            if (dropdown) {
+                dropdown.classList.add('active');
+            }
         }
     }
 }
@@ -376,9 +379,12 @@ function handleInputBlur(event) {
     if (event.target.type === 'search') {
         // Delay to allow click events on dropdown to fire first
         setTimeout(() => {
-            const dropdown = event.target.closest('.search-container').querySelector('.search-dropdown');
-            if (dropdown) {
-                dropdown.classList.remove('active');
+            const searchContainer = event.target.closest('.search-container');
+            if (searchContainer) {
+                const dropdown = searchContainer.querySelector('.search-dropdown');
+                if (dropdown) {
+                    dropdown.classList.remove('active');
+                }
             }
         }, 200);
     }

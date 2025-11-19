@@ -229,7 +229,7 @@ const cards = [
         section: "information-gathering",
         subsection: "safety",
         items: [
-            { type: "direction", content: "Confirm the patient's score of ${phq9q9score} on the PHQ-9 Q9 is consistent with their responses (the question which asks about thoughts of being better off dead or hurting yourself)." }
+            { type: "direction", content: "Confirm the patient's score of ${phq9-q9} on the PHQ-9 Q9 is consistent with their responses (the question which asks about thoughts of being better off dead or hurting yourself)." }
         ]
     },
     {

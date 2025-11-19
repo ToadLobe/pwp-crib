@@ -320,7 +320,7 @@ function getVariable(name) {
         case 'gadScore':
             return state.inputs['gad7-score']?.[0] || '';
 
-        case 'phq9q9score':
+        case 'phq9-q9':
             return state.inputs['phq9-q9']?.[0] || '';
 
         case 'diagnosis':
